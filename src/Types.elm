@@ -213,8 +213,8 @@ canPickUp object =
       False
 
 
-addItem : Object -> Model -> Model
-addItem item model =
+addItems : List Object -> Model -> Model
+addItems items model =
   let
     player =
       model.player
@@ -223,7 +223,7 @@ addItem item model =
       | player =
           { player
             | inventory =
-                item :: model.player.inventory
+                items ++ model.player.inventory
           }
     }
 
@@ -249,4 +249,4 @@ combineItems : Object -> Object -> Object -> Model -> Model
 combineItems obj1 obj2 result model =
   model
     |> removeItems [ obj1, obj2 ]
-    |> addItem result
+    |> addItems [ result ]

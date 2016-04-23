@@ -153,8 +153,7 @@ handleCommand command model =
     Examine UselessVaseFull ->
       ( model
           |> removeItems [ UselessVaseFull ]
-          |> addItem UselessVaseEmpty
-          |> addItem Stamps
+          |> addItems [ UselessVaseEmpty, Stamps ]
       , Just (examine UselessVaseFull)
       )
 
@@ -162,10 +161,11 @@ handleCommand command model =
       let
         newInventory =
           model
-            |> addItem BlackBiro
-            |> addItem UselessVaseFull
+            |> addItems [ BlackBiro, UselessVaseFull ]
       in
-        ( { newInventory | world = Dict.insert ( 11, 2 ) (Thing FridgeEmpty) newInventory.world }, Just (examine Fridge) )
+        ( { newInventory | world = Dict.insert ( 11, 2 ) (Thing FridgeEmpty) newInventory.world }
+        , Just (examine Fridge)
+        )
 
     Examine obj ->
       ( model, Just (examine obj) )
@@ -409,7 +409,7 @@ handleUse object otherObject model =
       Just
         ( model
             |> removeItems [ PotatoSackFull ]
-            |> addItem PotatoSackEmpty
+            |> addItems [ PotatoSackEmpty ]
         , Just "You empty the potatoes into the still and find yourself with an empty potato sack."
         )
 
@@ -438,7 +438,7 @@ handleUse object otherObject model =
       Just
         ( model
             |> removeItems [ WheelbarrowFull ]
-            |> addItem WheelbarrowFixed
+            |> addItems [ WheelbarrowFixed ]
         , Just "Emptying the contents of the wheelbarrow into the postbox, you give a sigh of relief.  Now all that there's left to do is to wait for it to be processed, and pray that bureaucracy will be merciful on you."
         )
 
