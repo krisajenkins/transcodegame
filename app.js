@@ -12001,14 +12001,18 @@ Elm.Narrative.make = function (_elm) {
                        }
                   case "Stamps": if (_p19._1.ctor === "Package") {
                           return $Maybe.Just({ctor: "_Tuple2"
-                                             ,_0: A4(combineItems,$Types.Stamps,$Types.Package,$Types.Parcel,model)
+                                             ,_0: A2(removeItems,
+                                             _U.list([$Types.Stamps]),
+                                             _U.update(model,{world: A3($Dict.insert,{ctor: "_Tuple2",_0: 7,_1: 7},$Types.Thing($Types.Parcel),model.world)}))
                                              ,_1: $Maybe.Just("It takes a lot of licking, but you cover the parcel in stamps eventually.  Might need a drinks break before you do anything else though.")});
                        } else {
                           break _v26_14;
                        }
                   case "Parcel": if (_p19._1.ctor === "WheelbarrowFixed") {
+                          var _p21 = A2(handleCommand,A2($Types.PickUp,{ctor: "_Tuple2",_0: 7,_1: 7},$Types.WheelbarrowFull),model);
+                          var newModel = _p21._0;
                           return $Maybe.Just({ctor: "_Tuple2"
-                                             ,_0: A4(combineItems,$Types.Parcel,$Types.WheelbarrowFixed,$Types.WheelbarrowFull,model)
+                                             ,_0: newModel
                                              ,_1: $Maybe.Just("You pick up the parcel and place it into the wheelbarrow.  Then you place the wheelbarrow into your pocket, not for one minute questioning the laws of logic and physics in this universe.")});
                        } else {
                           break _v26_14;
