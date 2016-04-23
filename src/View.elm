@@ -106,7 +106,7 @@ inventoryObjectView address object =
   button
     [ class "btn btn.info inventory-button"
     , onClick address (PlayerCommand (Interact (Thing object)))
-    , style [ ( "background-image", "url(/images/" ++ toString object ++ ".png" ) ]
+    , style [ ( "background-image", "url(images/" ++ toString object ++ ".png" ) ]
     ]
     [ text (toString object) ]
 
