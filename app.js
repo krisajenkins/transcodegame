@@ -11699,29 +11699,36 @@ Elm.Narrative.make = function (_elm) {
    var combineItems = F4(function (obj1,obj2,result,model) {    return A2(addItem,result,A2(removeItems,_U.list([obj1,obj2]),model));});
    var handleUse = F3(function (object,otherObject,model) {
       var _p0 = {ctor: "_Tuple2",_0: object,_1: otherObject};
-      _v0_9: do {
+      _v0_13: do {
          if (_p0.ctor === "_Tuple2") {
                switch (_p0._0.ctor)
                {case "ThePlayer": if (_p0._1.ctor === "ThePlayer") {
                           return $Maybe.Just({ctor: "_Tuple2",_0: model,_1: $Maybe.Just("You want me to use myself? Naughty.")});
                        } else {
-                          break _v0_9;
+                          break _v0_13;
                        }
+                  case "UselessVaseFull": return $Maybe.Just({ctor: "_Tuple2"
+                                                             ,_0: model
+                                                             ,_1: $Maybe.Just("What part of the word \'useless\' do you not understand?")});
+                  case "UselessVaseEmpty": return $Maybe.Just({ctor: "_Tuple2"
+                                                              ,_0: model
+                                                              ,_1: $Maybe.Just("What part of the word \'useless\' do you not understand?")});
                   case "BlackBiro": if (_p0._1.ctor === "Paperwork") {
                           return $Maybe.Just({ctor: "_Tuple2"
                                              ,_0: A4(combineItems,$Types.BlackBiro,$Types.Paperwork,$Types.PaperworkDone,model)
                                              ,_1: $Maybe.Just("The black biro allows you to fill out the stack of paperwork after a while.  A very, very long while.")});
                        } else {
-                          break _v0_9;
+                          break _v0_13;
                        }
                   case "Rag": if (_p0._1.ctor === "Cinzano") {
                           return $Maybe.Just({ctor: "_Tuple2"
                                              ,_0: A4(combineItems,$Types.Rag,$Types.Cinzano,$Types.Molotov,model)
                                              ,_1: $Maybe.Just("You turn the half empty bottle into what looks like a crude molotov cocktail.  This is probably a better use for a half empty bottle of Cinzano.")});
                        } else {
-                          break _v0_9;
+                          break _v0_13;
                        }
-                  case "Lighter": switch (_p0._1.ctor)
+                  case "Lighter": var _p1 = _p0._1;
+                    switch (_p1.ctor)
                     {case "Shed": return $Maybe.Just({ctor: "_Tuple2"
                                                      ,_0: model
                                                      ,_1: $Maybe.Just("The wood may look flammable, but it\'ll take more than the lighter to set it on fire.")});
@@ -11734,29 +11741,67 @@ Elm.Narrative.make = function (_elm) {
                        case "Molotov": return $Maybe.Just({ctor: "_Tuple2"
                                                           ,_0: A4(combineItems,$Types.Lighter,$Types.Molotov,$Types.MolotovLit,model)
                                                           ,_1: $Maybe.Just("Now it looks even more dangerous.")});
-                       default: break _v0_9;}
+                       case "PotatoSackFull": return $Maybe.Just({ctor: "_Tuple2"
+                                                                 ,_0: model
+                                                                 ,_1: $Maybe.Just("You might be able to make roast potatoes this way, but it\'ll take a really long time.")});
+                       default: return $Maybe.Nothing;}
                   case "MolotovLit": if (_p0._1.ctor === "Shed") {
                           return $Maybe.Just({ctor: "_Tuple2"
                                              ,_0: A2(removeItems,_U.list([$Types.MolotovLit]),model)
                                              ,_1: $Maybe.Just("You throw the molotov at the shed and watch as it burns to the ground.  You shed hating monster.  The one thing still standing in the wreckage is a broken wheelbarrow.")});
                        } else {
-                          break _v0_9;
+                          break _v0_13;
+                       }
+                  case "Still": if (_p0._1.ctor === "PotatoSackFull") {
+                          return $Maybe.Just({ctor: "_Tuple2"
+                                             ,_0: A2(removeItems,_U.list([$Types.PotatoSackFull]),model)
+                                             ,_1: $Maybe.Just("You empty the potatoes into the still and find yourself with an empty potato sack.")});
+                       } else {
+                          break _v0_13;
+                       }
+                  case "PotatoSackEmpty": if (_p0._1.ctor === "PaperworkDone") {
+                          return $Maybe.Just({ctor: "_Tuple2"
+                                             ,_0: A4(combineItems,$Types.PotatoSackEmpty,$Types.PaperworkDone,$Types.Package,model)
+                                             ,_1: $Maybe.Just("Sticking the paperwork into the potato sack makes what could just about pass as a package.  Good job!")});
+                       } else {
+                          break _v0_13;
+                       }
+                  case "Stamps": if (_p0._1.ctor === "Package") {
+                          return $Maybe.Just({ctor: "_Tuple2"
+                                             ,_0: A4(combineItems,$Types.Stamps,$Types.Package,$Types.Parcel,model)
+                                             ,_1: $Maybe.Just("It takes a lot of licking, but you cover the parcel in stamps eventually.  Might need a drinks break before you do anything else though.")});
+                       } else {
+                          break _v0_13;
+                       }
+                  case "Parcel": if (_p0._1.ctor === "WheelbarrowFixed") {
+                          return $Maybe.Just({ctor: "_Tuple2"
+                                             ,_0: A4(combineItems,$Types.Parcel,$Types.WheelbarrowFixed,$Types.WheelbarrowFull,model)
+                                             ,_1: $Maybe.Just("You pick up the parcel and place it into the wheelbarrow.  Then you place the wheelbarrow into your pocket, not for one minute questioning the laws of logic and physics in this universe.")});
+                       } else {
+                          break _v0_13;
+                       }
+                  case "WheelbarrowFull": if (_p0._1.ctor === "Postbox") {
+                          return $Maybe.Just({ctor: "_Tuple2"
+                                             ,_0: A2(addItem,$Types.WheelbarrowFixed,A2(removeItems,_U.list([$Types.WheelbarrowFull]),model))
+                                             ,_1: $Maybe.Just("Emptying the contents of the wheelbarrow into the postbox, you give a sigh of relief.  Now all that there\'s left to do is to wait for it to be processed, and pray that bureaucracy will be merciful on you.")});
+                       } else {
+                          break _v0_13;
                        }
                   case "Cinzano": if (_p0._1.ctor === "ThePlayer") {
                           return $Maybe.Just({ctor: "_Tuple2",_0: model,_1: $Maybe.Just("There. Is. No. Way. I. Will. Drink. Cinzano.")});
                        } else {
-                          break _v0_9;
+                          break _v0_13;
                        }
-                  default: break _v0_9;}
+                  default: break _v0_13;}
             } else {
-               break _v0_9;
+               break _v0_13;
             }
       } while (false);
       return $Maybe.Nothing;
    });
    var examine = function (obj) {
-      var _p1 = obj;
-      switch (_p1.ctor)
+      var _p2 = obj;
+      switch (_p2.ctor)
       {case "BlackBiro": return "It\'s a biro. It writes in black ink. This looks perfect for filling in official documents.";
          case "Chicken": return "It\'s a rubber chicken with a pulley in the middle.";
          case "Cinzano": return "Smells vaguely of petrol.  Why would it ever be half-empty?";
@@ -11790,150 +11835,178 @@ Elm.Narrative.make = function (_elm) {
          case "WheelbarrowFull": return "Your precious paperwork, all packaged and ready to roll. Literally.";
          default: return "Hey, I look great today! Especially for somebody who had way too many Cinzanos last night.";}
    };
-   var nameOf = function (obj) {    var _p2 = obj;if (_p2.ctor === "ThePlayer") {    return "Myself";} else {    return $Basics.toString(obj);}};
+   var nameOf = function (obj) {
+      var _p3 = obj;
+      switch (_p3.ctor)
+      {case "BlackBiro": return "Black Biro";
+         case "Chicken": return "Chicken";
+         case "Cinzano": return "Cinzano";
+         case "Fridge": return "Fridge";
+         case "FridgeEmpty": return "Empty Fridge";
+         case "Lighter": return "Lighter";
+         case "Molotov": return "Molotov Cocktail";
+         case "MolotovLit": return "Lit Molotov Cocktail";
+         case "Package": return "Package";
+         case "Paperwork": return "Paperwork";
+         case "PaperworkDone": return "Completed Paperwork";
+         case "Parcel": return "Parcel";
+         case "Postbox": return "Postbox";
+         case "PotatoSackEmpty": return "Empty Potato Sack";
+         case "PotatoSackFull": return "Full Potato Sack";
+         case "Rag": return "Rag";
+         case "Shed": return "Shed";
+         case "Stamps": return "Stamps";
+         case "Still": return "Still";
+         case "UselessVaseEmpty": return "Useless Empty Vase";
+         case "UselessVaseFull": return "Useless Vase";
+         case "WheelbarrowBroken": return "Broken Wheelbarrow";
+         case "WheelbarrowFixed": return "Wheelbarrow";
+         case "WheelbarrowFull": return "Loaded Wheelbarrow";
+         default: return "Myself";}
+   };
    var handleHint = F2(function (command,model) {
-      var _p3 = command;
-      if (_p3.ctor === "WalkTo") {
-            return $Maybe.Just(A2($Basics._op["++"],"Walk to ",$Basics.toString(_p3._0)));
+      var _p4 = command;
+      if (_p4.ctor === "WalkTo") {
+            return $Maybe.Just(A2($Basics._op["++"],"Walk to ",$Basics.toString(_p4._0)));
          } else {
             return $Maybe.Nothing;
          }
    });
    var handleCommand = F2(function (command,model) {
       handleCommand: while (true) {
-         var _p4 = command;
-         switch (_p4.ctor)
-         {case "WalkTo": var _p6 = _p4._0;
-              if (!_U.eq(_p6,model.player.position)) if ($Types.canStandOn(A2($Types.objectAt,model.world,_p6))) return {ctor: "_Tuple2"
+         var _p5 = command;
+         switch (_p5.ctor)
+         {case "WalkTo": var _p7 = _p5._0;
+              if (!_U.eq(_p7,model.player.position)) if ($Types.canStandOn(A2($Types.objectAt,model.world,_p7))) return {ctor: "_Tuple2"
                                                                                                                         ,_0: _U.update(model,
-                                                                                                                        {destination: $Maybe.Just(_p6)
+                                                                                                                        {destination: $Maybe.Just(_p7)
                                                                                                                         ,partialCommand: $Maybe.Nothing})
                                                                                                                         ,_1: $Maybe.Just("Chaaaaarrrrrrge!")};
                  else {
-                       var neighbours = A2($Types.validMovesFrom,model.world,_p6);
-                       var _p5 = $List.head($Set.toList(neighbours));
-                       if (_p5.ctor === "Nothing") {
+                       var neighbours = A2($Types.validMovesFrom,model.world,_p7);
+                       var _p6 = $List.head($Set.toList(neighbours));
+                       if (_p6.ctor === "Nothing") {
                              return {ctor: "_Tuple2",_0: model,_1: $Maybe.Just("Hmmm...that looks like that would hurt.")};
                           } else {
-                             var _v6 = $Types.WalkTo(_p5._0),_v7 = model;
-                             command = _v6;
-                             model = _v7;
+                             var _v7 = $Types.WalkTo(_p6._0),_v8 = model;
+                             command = _v7;
+                             model = _v8;
                              continue handleCommand;
                           }
                     } else return {ctor: "_Tuple2",_0: model,_1: $Maybe.Just("I\'m already there.")};
-            case "PartialCommand": var _p8 = _p4._0;
+            case "PartialCommand": var _p9 = _p5._0;
               return {ctor: "_Tuple2"
-                     ,_0: _U.update(model,{partialCommand: $Maybe.Just(_p8)})
+                     ,_0: _U.update(model,{partialCommand: $Maybe.Just(_p9)})
                      ,_1: $Maybe.Just(function () {
-                        var _p7 = _p8;
-                        switch (_p7.ctor)
+                        var _p8 = _p9;
+                        switch (_p8.ctor)
                         {case "PartialPickUp": return "Okay, what shall I pick up?";
                            case "PartialExamine": return "Okay, what shall I examine?";
                            case "PartialUse": return "Okay, what shall I use?";
                            default: return "Okay, what shall I use it with?";}
                      }())};
-            case "PickUp": if (_p4._1.ctor === "ThePlayer") {
+            case "PickUp": if (_p5._1.ctor === "ThePlayer") {
                     return {ctor: "_Tuple2",_0: model,_1: $Maybe.Just("That was a real pick-me-up!")};
                  } else {
-                    var _p9 = _p4._1;
-                    if ($Types.canPickUp(_p9)) {
+                    var _p10 = _p5._1;
+                    if ($Types.canPickUp(_p10)) {
                           var player = model.player;
                           var newModel = _U.update(model,
-                          {world: A3($Dict.insert,_p4._0,$Types.Path,model.world)
-                          ,player: _U.update(player,{inventory: A2($List._op["::"],_p9,player.inventory)})});
-                          return {ctor: "_Tuple2",_0: newModel,_1: $Maybe.Just(A2($Basics._op["++"],"I\'ve got: ",nameOf(_p9)))};
+                          {world: A3($Dict.insert,_p5._0,$Types.Path,model.world)
+                          ,player: _U.update(player,{inventory: A2($List._op["::"],_p10,player.inventory)})});
+                          return {ctor: "_Tuple2",_0: newModel,_1: $Maybe.Just(A2($Basics._op["++"],"I\'ve got: ",nameOf(_p10)))};
                        } else return {ctor: "_Tuple2",_0: model,_1: $Maybe.Just("I can\'t pick that up.")};
                  }
-            case "Interact": switch (_p4._0.ctor)
+            case "Interact": switch (_p5._0.ctor)
               {case "Path": return {ctor: "_Tuple2",_0: model,_1: $Maybe.Nothing};
                  case "Block": return {ctor: "_Tuple2",_0: model,_1: $Maybe.Nothing};
-                 default: var _p11 = _p4._0._0;
-                   var _p10 = model.partialCommand;
-                   if (_p10.ctor === "Just") {
-                         switch (_p10._0.ctor)
+                 default: var _p12 = _p5._0._0;
+                   var _p11 = model.partialCommand;
+                   if (_p11.ctor === "Just") {
+                         switch (_p11._0.ctor)
                          {case "PartialPickUp": return {ctor: "_Tuple2"
                                                        ,_0: _U.update(model,{partialCommand: $Maybe.Nothing})
                                                        ,_1: $Maybe.Just("I\'ve already got it.")};
                             case "PartialUse": return {ctor: "_Tuple2"
-                                                      ,_0: _U.update(model,{partialCommand: $Maybe.Just($Types.PartialUseOne(_p11))})
+                                                      ,_0: _U.update(model,{partialCommand: $Maybe.Just($Types.PartialUseOne(_p12))})
                                                       ,_1: $Maybe.Just("What shall I use it with?")};
-                            case "PartialUseOne": var _v10 = A2($Types.Use,_p11,_p10._0._0),_v11 = _U.update(model,{partialCommand: $Maybe.Nothing});
-                              command = _v10;
-                              model = _v11;
+                            case "PartialUseOne": var _v11 = A2($Types.Use,_p12,_p11._0._0),_v12 = _U.update(model,{partialCommand: $Maybe.Nothing});
+                              command = _v11;
+                              model = _v12;
                               continue handleCommand;
-                            default: var _v12 = $Types.Examine(_p11),_v13 = _U.update(model,{partialCommand: $Maybe.Nothing});
-                              command = _v12;
-                              model = _v13;
+                            default: var _v13 = $Types.Examine(_p12),_v14 = _U.update(model,{partialCommand: $Maybe.Nothing});
+                              command = _v13;
+                              model = _v14;
                               continue handleCommand;}
                       } else {
-                         var _v14 = $Types.Examine(_p11),_v15 = model;
-                         command = _v14;
-                         model = _v15;
+                         var _v15 = $Types.Examine(_p12),_v16 = model;
+                         command = _v15;
+                         model = _v16;
                          continue handleCommand;
                       }}
-            case "Use": var _p13 = _p4._1;
-              var _p12 = _p4._0;
+            case "Use": var _p14 = _p5._1;
+              var _p13 = _p5._0;
               return A2($Maybe.withDefault,
               {ctor: "_Tuple2",_0: model,_1: $Maybe.Just("It\'s not going to work.")},
-              $Maybe.oneOf(_U.list([A3(handleUse,_p12,_p13,model),A3(handleUse,_p13,_p12,model)])));
-            case "InteractAt": switch (_p4._1.ctor)
-              {case "Thing": var _p16 = _p4._0;
-                   var _p15 = _p4._1._0;
-                   var _p14 = model.partialCommand;
-                   if (_p14.ctor === "Just" && _p14._0.ctor === "PartialPickUp") {
-                         var _v17 = $Types.WalkTo(_p16),
-                         _v18 = _U.update(model,{partialCommand: $Maybe.Nothing,queuedCommand: $Maybe.Just(A2($Types.PickUp,_p16,_p15))});
-                         command = _v17;
-                         model = _v18;
+              $Maybe.oneOf(_U.list([A3(handleUse,_p13,_p14,model),A3(handleUse,_p14,_p13,model)])));
+            case "InteractAt": switch (_p5._1.ctor)
+              {case "Thing": var _p17 = _p5._0;
+                   var _p16 = _p5._1._0;
+                   var _p15 = model.partialCommand;
+                   if (_p15.ctor === "Just" && _p15._0.ctor === "PartialPickUp") {
+                         var _v18 = $Types.WalkTo(_p17),
+                         _v19 = _U.update(model,{partialCommand: $Maybe.Nothing,queuedCommand: $Maybe.Just(A2($Types.PickUp,_p17,_p16))});
+                         command = _v18;
+                         model = _v19;
                          continue handleCommand;
                       } else {
-                         var _v19 = $Types.Interact($Types.Thing(_p15)),_v20 = model;
-                         command = _v19;
-                         model = _v20;
+                         var _v20 = $Types.Interact($Types.Thing(_p16)),_v21 = model;
+                         command = _v20;
+                         model = _v21;
                          continue handleCommand;
                       }
-                 case "Block": var _p17 = model.partialCommand;
-                   _v21_2: do {
-                      if (_p17.ctor === "Just") {
-                            switch (_p17._0.ctor)
+                 case "Block": var _p18 = model.partialCommand;
+                   _v22_2: do {
+                      if (_p18.ctor === "Just") {
+                            switch (_p18._0.ctor)
                             {case "PartialPickUp": return {ctor: "_Tuple2"
                                                           ,_0: _U.update(model,{partialCommand: $Maybe.Nothing})
                                                           ,_1: $Maybe.Just("Yeah, tear down the walls! AnARcHy!!1!")};
                                case "PartialExamine": return {ctor: "_Tuple2"
                                                              ,_0: _U.update(model,{partialCommand: $Maybe.Nothing})
                                                              ,_1: $Maybe.Just("It\'s a wall.")};
-                               default: break _v21_2;}
+                               default: break _v22_2;}
                          } else {
-                            break _v21_2;
+                            break _v22_2;
                          }
                    } while (false);
-                   var _v22 = $Types.WalkTo(_p4._0),_v23 = model;
-                   command = _v22;
-                   model = _v23;
+                   var _v23 = $Types.WalkTo(_p5._0),_v24 = model;
+                   command = _v23;
+                   model = _v24;
                    continue handleCommand;
-                 default: var _p18 = model.partialCommand;
-                   _v24_2: do {
-                      if (_p18.ctor === "Just") {
-                            switch (_p18._0.ctor)
+                 default: var _p19 = model.partialCommand;
+                   _v25_2: do {
+                      if (_p19.ctor === "Just") {
+                            switch (_p19._0.ctor)
                             {case "PartialPickUp": return {ctor: "_Tuple2"
                                                           ,_0: _U.update(model,{partialCommand: $Maybe.Nothing})
                                                           ,_1: $Maybe.Just("DIY was never my strong suit.")};
                                case "PartialExamine": return {ctor: "_Tuple2"
                                                              ,_0: _U.update(model,{partialCommand: $Maybe.Nothing})
                                                              ,_1: $Maybe.Just("It\'s the floor.")};
-                               default: break _v24_2;}
+                               default: break _v25_2;}
                          } else {
-                            break _v24_2;
+                            break _v25_2;
                          }
                    } while (false);
-                   var _v25 = $Types.WalkTo(_p4._0),_v26 = model;
-                   command = _v25;
-                   model = _v26;
+                   var _v26 = $Types.WalkTo(_p5._0),_v27 = model;
+                   command = _v26;
+                   model = _v27;
                    continue handleCommand;}
-            default: if (_p4._0.ctor === "Cinzano") {
+            default: if (_p5._0.ctor === "Cinzano") {
                     return {ctor: "_Tuple2",_0: model,_1: $Maybe.Just("The party isn\'t over \'til there only Cinzano left to drink.")};
                  } else {
-                    return {ctor: "_Tuple2",_0: model,_1: $Maybe.Just(examine(_p4._0))};
+                    return {ctor: "_Tuple2",_0: model,_1: $Maybe.Just(examine(_p5._0))};
                  }}
       }
    });
