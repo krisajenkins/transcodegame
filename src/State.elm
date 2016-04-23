@@ -65,11 +65,7 @@ initialWorld =
       , verticalWall 8 [2..6]
       , horizontalWall [12..13] 2
       , [ ( ( 9, 6 )
-          , Thing
-              { name = "Fish"
-              , description = "A cod. Or maybe a trout. Which is the one with the funny lips?"
-              , color = "#fff905"
-              }
+          , Thing Cinzano
           )
         ]
       ]
@@ -82,6 +78,7 @@ initialModel =
   { world = initialWorld
   , dialogue = Just "Well, I guess I'd better look around..."
   , hint = Nothing
+  , partialCommand = Nothing
   , player =
       { position = ( 1, 1 )
       , inventory = []
@@ -98,7 +95,7 @@ initialEffects =
 
 updateWithDialogue : Action -> Model -> ( Model, Maybe String )
 updateWithDialogue action model =
-  case action of
+  case Debug.log "ACTION" action of
     Hint Nothing ->
       ( { model | hint = Nothing }
       , Nothing
@@ -167,8 +164,8 @@ handleWalk time model =
                       Just Block ->
                         Just "Help, I'm stuck in a wall!"
 
-                      Just (Thing object) ->
-                        Just ("I can see: " ++ object.name)
+                      Just (Thing Cinzano) ->
+                        Just ("Cinzano. Looks awful.")
                   )
 
                 Just p ->

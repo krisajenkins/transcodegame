@@ -19,7 +19,7 @@ root : Address Action -> Model -> Html
 root address model =
   svg
     [ width (px 800)
-    , height (px 400)
+    , height (px 320)
     ]
     [ g
         []
@@ -31,29 +31,29 @@ root address model =
     ]
 
 
-tile : Address Action -> Position -> Cell -> Svg
+tile : Address Action -> Position -> PartialCommand -> Cell -> Svg
 tile address position cell =
   let
     ( colours, maybeCommand ) =
-      case cell of
-        Path ->
+      case ( partialCommand, cell ) of
+        ( _, Path ) ->
           ( [ stroke "grey", fill "#fdfdfd" ]
           , Just (WalkTo position)
           )
 
-        Block ->
+        ( _, Block ) ->
           ( [ stroke "#0466da", fill "#04c9da" ]
           , Just (WalkTo position)
           )
 
-        Character ->
+        ( _, Character ) ->
           ( [ stroke "#8504da", fill "#e4049a" ]
           , Nothing
           )
 
-        Thing object ->
-          ( [ stroke "black", fill object.color ]
-          , Nothing
+        ( _, Thing object ) ->
+          ( [ stroke "black", fill "yellow" ]
+          , Just (PickUp object)
           )
   in
     rect

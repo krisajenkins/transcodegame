@@ -1,11 +1,11 @@
 module View (root) where
 
-import Signal exposing (..)
-import Html exposing (Html)
-import Types exposing (..)
+import Common.View exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Common.View exposing (..)
+import Html.Events exposing (..)
+import Signal exposing (..)
+import Types exposing (..)
 import View.Svg
 
 
@@ -37,7 +37,9 @@ root address model =
         ]
         [ text (Maybe.withDefault "" model.dialogue) ]
     , button
-        [ class "btn btn-lg btn-info" ]
+        [ class "btn btn-lg btn-info"
+        , onClick address (PlayerCommand (PartialCommand PartialPickUp))
+        ]
         [ text "Pick up" ]
     , inventoryView address model.player.inventory
     , hintView model.hint
@@ -65,5 +67,11 @@ inventoryView address inventory =
         [ text "Inventory" ]
 
       xs ->
-        List.map (\o -> div [] [ text o.name ]) xs
+        List.map
+          (\object ->
+            div
+              []
+              [ text (toString object) ]
+          )
+          xs
     )

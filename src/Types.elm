@@ -13,6 +13,10 @@ type alias World a =
   Dict Position a
 
 
+type Object
+  = Cinzano
+
+
 type Cell
   = Block
   | Path
@@ -20,18 +24,19 @@ type Cell
   | Thing Object
 
 
+type PartialCommand
+  = PartialPickUp
+  | PartialExamine
+  | PartialUse
+  | PartialUseOne Object
+
+
 type Command
   = WalkTo Position
   | PickUp Object
   | Examine Object
   | Use Object Object
-
-
-type alias Object =
-  { name : String
-  , description : String
-  , color : String
-  }
+  | PartialCommand PartialCommand
 
 
 type Action
@@ -49,6 +54,7 @@ type alias Model =
   , player : Player
   , dialogue : Maybe String
   , hint : Maybe String
+  , partialCommand : Maybe PartialCommand
   , destination : Maybe Position
   , timeSinceLastMove : Maybe Time
   }
