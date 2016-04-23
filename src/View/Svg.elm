@@ -31,27 +31,27 @@ root address model =
     ]
 
 
-tile : Address Action -> Position -> PartialCommand -> Cell -> Svg
+tile : Address Action -> Position -> Cell -> Svg
 tile address position cell =
   let
     ( colours, maybeCommand ) =
-      case ( partialCommand, cell ) of
-        ( _, Path ) ->
+      case cell of
+        Path ->
           ( [ stroke "grey", fill "#fdfdfd" ]
           , Just (WalkTo position)
           )
 
-        ( _, Block ) ->
+        Block ->
           ( [ stroke "#0466da", fill "#04c9da" ]
           , Just (WalkTo position)
           )
 
-        ( _, Character ) ->
+        Character ->
           ( [ stroke "#8504da", fill "#e4049a" ]
           , Nothing
           )
 
-        ( _, Thing object ) ->
+        Thing object ->
           ( [ stroke "black", fill "yellow" ]
           , Just (PickUp object)
           )
