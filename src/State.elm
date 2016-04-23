@@ -67,9 +67,9 @@ initialWorld =
       , verticalWall 5 [6..9]
       , horizontalWall [10..12] 6
       , verticalWall 12 [5..9]
-      , verticalWall 16 [4..6]
       , [ ( ( 8, 1 ), Block ) ]
       , [ ( ( 8, 3 ), Block ) ]
+      , [ ( ( 16, 5 ), Thing Shed ) ]
       , [ ( ( 1, 4 ), Thing Chicken ) ]
       , [ ( ( 1, 5 ), Thing Postbox ) ]
       , [ ( ( 6, 3 ), Thing PotatoSackFull ) ]
