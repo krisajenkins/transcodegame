@@ -161,15 +161,12 @@ examine obj =
 
 handleUse : Object -> Object -> Model -> Maybe ( Model, Maybe String )
 handleUse object otherObject model =
-  if object == otherObject then
-    Just
-      ( model
-      , Just "I can't use something with itself."
-      )
-  else
-    case ( object, otherObject ) of
-      ( Cinzano, ThePlayer ) ->
-        Just ( model, Just "There. Is. No. Way. I. Will. Drink. Cinzano." )
+  case ( object, otherObject ) of
+    ( ThePlayer, ThePlayer ) ->
+      Just ( model, Just "You want me to use myself? Naughty." )
 
-      _ ->
-        Nothing
+    ( Cinzano, ThePlayer ) ->
+      Just ( model, Just "There. Is. No. Way. I. Will. Drink. Cinzano." )
+
+    _ ->
+      Nothing
