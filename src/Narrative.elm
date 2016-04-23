@@ -171,11 +171,80 @@ handleHint command model =
 nameOf : Object -> String
 nameOf obj =
   case obj of
+    BlackBiro ->
+      "Black Biro"
+
+    Chicken ->
+      "Chicken"
+
+    Cinzano ->
+      "Cinzano"
+
+    Fridge ->
+      "Fridge"
+
+    FridgeEmpty ->
+      "Empty Fridge"
+
+    Lighter ->
+      "Lighter"
+
+    Molotov ->
+      "Molotov Cocktail"
+
+    MolotovLit ->
+      "Lit Molotov Cocktail"
+
+    Package ->
+      "Package"
+
+    Paperwork ->
+      "Paperwork"
+
+    PaperworkDone ->
+      "Completed Paperwork"
+
+    Parcel ->
+      "Parcel"
+
+    Postbox ->
+      "Postbox"
+
+    PotatoSackEmpty ->
+      "Empty Potato Sack"
+
+    PotatoSackFull ->
+      "Full Potato Sack"
+
+    Rag ->
+      "Rag"
+
+    Shed ->
+      "Shed"
+
+    Stamps ->
+      "Stamps"
+
+    Still ->
+      "Still"
+
+    UselessVaseEmpty ->
+      "Useless Empty Vase"
+
+    UselessVaseFull ->
+      "Useless Vase"
+
+    WheelbarrowBroken ->
+      "Broken Wheelbarrow"
+
+    WheelbarrowFixed ->
+      "Wheelbarrow"
+
+    WheelbarrowFull ->
+      "Loaded Wheelbarrow"
+
     ThePlayer ->
       "Myself"
-
-    _ ->
-      toString obj
 
 
 examine : Object -> String
