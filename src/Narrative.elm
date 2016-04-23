@@ -151,7 +151,7 @@ handleCommand command model =
       )
 
     Examine UselessVaseFull ->
-      ( addItem Stamps (addItem UselessVaseEmpty (removeItems [UselessVaseFull] model)), Just (examine UselessVaseFull) )
+      ( addItem Stamps (addItem UselessVaseEmpty (removeItems [ UselessVaseFull ] model)), Just (examine UselessVaseFull) )
 
     Examine Fridge ->
       ( addItem BlackBiro model, Just (examine Fridge) )
@@ -374,8 +374,12 @@ handleUse object otherObject model =
           Nothing
 
     ( MolotovLit, Shed ) ->
-      let newInv = removeItems [ MolotovLit ] model
-          newModel = { newInv | world = Dict.insert (16,5) (Thing WheelbarrowBroken) model.world }
+      let
+        newInv =
+          removeItems [ MolotovLit ] model
+
+        newModel =
+          { newInv | world = Dict.insert ( 16, 5 ) (Thing WheelbarrowBroken) model.world }
       in
         Just
           ( newModel
@@ -383,8 +387,11 @@ handleUse object otherObject model =
           )
 
     ( WheelbarrowBroken, Chicken ) ->
-      Just (handleCommand (PickUp (16,5) WheelbarrowFixed)
-                          (removeItems [ Chicken ] model))
+      Just
+        (handleCommand
+          (PickUp ( 16, 5 ) WheelbarrowFixed)
+          (removeItems [ Chicken ] model)
+        )
 
     ( Still, PotatoSackFull ) ->
       Just
