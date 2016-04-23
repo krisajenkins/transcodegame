@@ -15,7 +15,6 @@ type alias World a =
 
 type Object
   = BlackBiro
-  | BlueBiro
   | Chicken
   | Cinzano
   | Molotov
@@ -29,6 +28,8 @@ type Object
   | Rag
   | Shed
   | Stamps
+  | UselessVaseEmpty
+  | UselessVaseFull
   | WheelbarrowBroken
   | WheelbarrowFixed
   | Unknown
