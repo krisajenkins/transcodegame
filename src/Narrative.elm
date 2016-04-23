@@ -437,7 +437,7 @@ removeItems : List Object -> Model -> Model
 removeItems items model =
   let
     newInventory =
-      List.filter (flip List.member items) model.player.inventory
+      List.filter (not << flip List.member items) model.player.inventory
 
     player =
       model.player
