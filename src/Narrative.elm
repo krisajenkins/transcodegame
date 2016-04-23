@@ -57,6 +57,12 @@ handleCommand command model =
       else
         ( model, Just "I can't pick that up." )
 
+    Interact Path ->
+      ( model, Nothing )
+
+    Interact Block ->
+      ( model, Nothing )
+
     Interact (Thing object) ->
       case model.partialCommand of
         Just PartialPickUp ->
@@ -70,15 +76,8 @@ handleCommand command model =
           )
 
         Just (PartialUseOne otherObject) ->
-          let
-            newModel =
-              { model | partialCommand = Nothing }
-          in
-            Maybe.oneOf
-              [ handleUse object otherObject newModel
-              , handleUse otherObject object newModel
-              ]
-              |> Maybe.withDefault ( model, Just "It's not going to work." )
+          { model | partialCommand = Nothing }
+            |> handleCommand (Use object otherObject)
 
         Just PartialExamine ->
           { model | partialCommand = Nothing }
@@ -86,6 +85,13 @@ handleCommand command model =
 
         Nothing ->
           handleCommand (Examine object) model
+
+    Use object otherObject ->
+      Maybe.oneOf
+        [ handleUse object otherObject model
+        , handleUse otherObject object model
+        ]
+        |> Maybe.withDefault ( model, Just "It's not going to work." )
 
     InteractAt position (Thing object) ->
       case model.partialCommand of
@@ -96,14 +102,17 @@ handleCommand command model =
         _ ->
           handleCommand (Interact (Thing object)) model
 
+    InteractAt position Block ->
+      ( model, Nothing )
+
+    InteractAt position Path ->
+      ( model, Nothing )
+
     Examine Cinzano ->
       ( model, Just "The party isn't over 'til there only Cinzano left to drink." )
 
     Examine obj ->
       ( model, Just (examine obj) )
-
-    _ ->
-      ( model, Just "I'm sorry, I can't do that." )
 
 
 handleHint : Command -> Model -> Maybe String
