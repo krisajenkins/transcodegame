@@ -146,8 +146,20 @@ canPickUp object =
     Cinzano ->
       True
 
+    Fridge ->
+      False
+
+    FridgeEmpty ->
+      False
+
+    Lighter ->
+      True
+
     Molotov ->
       True
+
+    MolotovLit ->
+      False
 
     Package ->
       False
@@ -178,6 +190,9 @@ canPickUp object =
 
     Stamps ->
       True
+
+    Still ->
+      False
 
     UselessVaseEmpty ->
       True

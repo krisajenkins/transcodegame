@@ -209,6 +209,10 @@ examine obj =
     Stamps ->
       "This looks like just about enough to send a really big parcel. You may die of dehydration whilst sticking them down though."
 
+    Still ->
+      -- TODO
+      "[Still examine text]"
+
     UselessVaseEmpty ->
       "This vase is useless. Absolutely useless. Why are you still looking at it?"
 
@@ -234,8 +238,54 @@ handleUse object otherObject model =
     ( ThePlayer, ThePlayer ) ->
       Just ( model, Just "You want me to use myself? Naughty." )
 
+    ( BlackBiro, Paperwork ) ->
+      Just ( combineItems BlackBiro Paperwork PaperworkDone model
+           , Just "The black biro allows you to fill out the stack of paperwork after a while.  A very, very long while." )
+
+    ( Rag, Cinzano ) ->
+      Just ( combineItems Rag Cinzano Molotov model
+           , Just "You turn the half empty bottle into what looks like a crude molotov cocktail.  This is probably a better use for a half empty bottle of Cinzano." )
+
+    ( Lighter, Shed ) ->
+      Just ( model, Just "The wood may look flammable, but it'll take more than the lighter to set it on fire." )
+
+    ( Lighter, Paperwork ) ->
+      Just ( model, Just "This is not the correct way to get out your anger at bureaucracy." )
+
+    ( Lighter, PaperworkDone ) ->
+      Just ( model, Just "This is not the correct way to get out your anger at bureaucracy." )
+
+    ( Lighter, Molotov ) ->
+      Just ( combineItems Lighter Molotov MolotovLit model
+           , Just "Now it looks even more dangerous." )
+
+    ( MolotovLit, Shed ) ->
+      Just ( removeItems [MolotovLit] model
+           , Just "You throw the molotov at the shed and watch as it burns to the ground.  You shed hating monster.  The one thing still standing in the wreckage is a broken wheelbarrow." )
+
     ( Cinzano, ThePlayer ) ->
       Just ( model, Just "There. Is. No. Way. I. Will. Drink. Cinzano." )
 
     _ ->
       Nothing
+
+combineItems : Object -> Object -> Object -> Model -> Model
+combineItems obj1 obj2 result model =
+  addItem result (removeItems [obj1, obj2] model)
+
+addItem : Object -> Model -> Model
+addItem item model =
+  let newInventory = item :: model.player.inventory
+      player = model.player
+      newPlayer = { player | inventory = newInventory }
+  in
+    { model | player = newPlayer }
+
+removeItems : List Object -> Model -> Model
+removeItems items model =
+  let newInventory = List.filter (flip List.member items) model.player.inventory
+      player = model.player
+      newPlayer = { player | inventory = newInventory }
+  in
+    { model | player = newPlayer  }
+
