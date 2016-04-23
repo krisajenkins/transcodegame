@@ -12324,7 +12324,7 @@ Elm.View.make = function (_elm) {
               ,A2($Html$Events.onClick,address,$Types.PlayerCommand($Types.Interact($Types.Thing(object))))
               ,$Html$Attributes.style(_U.list([{ctor: "_Tuple2"
                                                ,_0: "background-image"
-                                               ,_1: A2($Basics._op["++"],"url(/images/",A2($Basics._op["++"],$Basics.toString(object),".png"))}]))]),
+                                               ,_1: A2($Basics._op["++"],"url(images/",A2($Basics._op["++"],$Basics.toString(object),".png"))}]))]),
       _U.list([$Html.text($Basics.toString(object))]));
    });
    var inventoryView = F2(function (address,inventory) {
