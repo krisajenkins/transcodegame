@@ -350,20 +350,25 @@ handleUse object otherObject model =
         , Just "You turn the half empty bottle into what looks like a crude molotov cocktail.  This is probably a better use for a half empty bottle of Cinzano."
         )
 
-    ( Lighter, Shed ) ->
-      Just ( model, Just "The wood may look flammable, but it'll take more than the lighter to set it on fire." )
+    ( Lighter, second ) ->
+      case second of
+        Shed ->
+          Just ( model, Just "The wood may look flammable, but it'll take more than the lighter to set it on fire." )
 
-    ( Lighter, Paperwork ) ->
-      Just ( model, Just "This is not the correct way to get out your anger at bureaucracy." )
+        Paperwork ->
+          Just ( model, Just "This is not the correct way to get out your anger at bureaucracy." )
 
-    ( Lighter, PaperworkDone ) ->
-      Just ( model, Just "This is not the correct way to get out your anger at bureaucracy." )
+        PaperworkDone ->
+          Just ( model, Just "This is not the correct way to get out your anger at bureaucracy." )
 
-    ( Lighter, Molotov ) ->
-      Just
-        ( combineItems Lighter Molotov MolotovLit model
-        , Just "Now it looks even more dangerous."
-        )
+        Molotov ->
+          Just ( combineItems Lighter Molotov MolotovLit model, Just "Now it looks even more dangerous." )
+
+        PotatoSackFull ->
+          Just ( model, Just "You might be able to make roast potatoes this way, but it'll take a really long time." )
+
+        _ ->
+          Nothing
 
     ( MolotovLit, Shed ) ->
       Just
@@ -400,9 +405,6 @@ handleUse object otherObject model =
         ( addItem WheelbarrowFixed (removeItems [ WheelbarrowFull ] model)
         , Just "Emptying the contents of the wheelbarrow into the postbox, you give a sigh of relief.  Now all that there's left to do is to wait for it to be processed, and pray that bureaucracy will be merciful on you."
         )
-
-    ( Lighter, PotatoSackFull ) ->
-      Just ( model, Just "You might be able to make roast potatoes this way, but it'll take a really long time." )
 
     ( Cinzano, ThePlayer ) ->
       Just ( model, Just "There. Is. No. Way. I. Will. Drink. Cinzano." )
