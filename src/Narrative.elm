@@ -154,8 +154,11 @@ handleCommand command model =
       ( addItem Stamps (addItem UselessVaseEmpty (removeItems [ UselessVaseFull ] model)), Just (examine UselessVaseFull) )
 
     Examine Fridge ->
-      let newInventory = addItem UselessVaseFull (addItem BlackBiro model)
-      in  ( { newInventory | world = Dict.insert (11,2) (Thing FridgeEmpty) newInventory.world }, Just (examine Fridge) ) 
+      let
+        newInventory =
+          addItem UselessVaseFull (addItem BlackBiro model)
+      in
+        ( { newInventory | world = Dict.insert ( 11, 2 ) (Thing FridgeEmpty) newInventory.world }, Just (examine Fridge) )
 
     Examine obj ->
       ( model, Just (examine obj) )
@@ -344,7 +347,7 @@ handleUse object otherObject model =
 
     ( BlackBiro, Paperwork ) ->
       Just
-        ( removeItems [ BlackBiro, Paperwork ] { model | world = Dict.insert (7,7) (Thing PaperworkDone) model.world }
+        ( removeItems [ BlackBiro, Paperwork ] { model | world = Dict.insert ( 7, 7 ) (Thing PaperworkDone) model.world }
         , Just "The black biro allows you to fill out the stack of paperwork after a while.  A very, very long while."
         )
 
@@ -402,19 +405,22 @@ handleUse object otherObject model =
 
     ( PotatoSackEmpty, PaperworkDone ) ->
       Just
-        ( removeItems [ PotatoSackEmpty ] { model | world = Dict.insert (7,7) (Thing Package) model.world } 
+        ( removeItems [ PotatoSackEmpty ] { model | world = Dict.insert ( 7, 7 ) (Thing Package) model.world }
         , Just "Sticking the paperwork into the potato sack makes what could just about pass as a package.  Good job!"
         )
 
     ( Stamps, Package ) ->
       Just
-        ( removeItems [ Stamps ] { model | world = Dict.insert (7,7) (Thing Parcel) model.world }
+        ( removeItems [ Stamps ] { model | world = Dict.insert ( 7, 7 ) (Thing Parcel) model.world }
         , Just "It takes a lot of licking, but you cover the parcel in stamps eventually.  Might need a drinks break before you do anything else though."
         )
 
     ( Parcel, WheelbarrowFixed ) ->
-      let ( newModel, _ ) = handleCommand (PickUp (7,7) WheelbarrowFull) model
-      in  Just ( newModel, Just "You pick up the parcel and place it into the wheelbarrow.  Then you place the wheelbarrow into your pocket, not for one minute questioning the laws of logic and physics in this universe.")
+      let
+        ( newModel, _ ) =
+          handleCommand (PickUp ( 7, 7 ) WheelbarrowFull) model
+      in
+        Just ( newModel, Just "You pick up the parcel and place it into the wheelbarrow.  Then you place the wheelbarrow into your pocket, not for one minute questioning the laws of logic and physics in this universe." )
 
     ( WheelbarrowFull, Postbox ) ->
       Just
