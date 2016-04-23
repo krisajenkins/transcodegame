@@ -51,29 +51,7 @@ root address model =
           ]
         )
     , inventoryView address model.player.inventory
-    , div
-        [ class "alert alert-info" ]
-        [ code
-            []
-            [ text
-                (case model.partialCommand of
-                  Nothing ->
-                    ""
-
-                  Just PartialPickUp ->
-                    "Pick up..."
-
-                  Just PartialExamine ->
-                    "Examine..."
-
-                  Just PartialUse ->
-                    "Use..."
-
-                  Just (PartialUseOne thing) ->
-                    "Use " ++ Narrative.nameOf thing ++ " with..."
-                )
-            ]
-        ]
+    , partialCommandView model.partialCommand
     ]
 
 
@@ -81,9 +59,7 @@ inventoryView : Address Action -> List Object -> Html
 inventoryView address inventory =
   div
     []
-    [ h4
-        []
-        [ text "Inventory" ]
+    [ h4 [] [ text "Inventory" ]
     , div [] (List.map (inventoryObjectView address) inventory)
     ]
 
@@ -96,6 +72,30 @@ inventoryObjectView address object =
     , style [ ( "background-image", "url(images/" ++ toString object ++ ".png" ) ]
     ]
     [ text (toString object) ]
+
+
+partialCommandView : Maybe PartialCommand -> Html
+partialCommandView partialCommand =
+  div
+    []
+    [ text
+        (case partialCommand of
+          Nothing ->
+            ""
+
+          Just PartialPickUp ->
+            "Pick up..."
+
+          Just PartialExamine ->
+            "Examine..."
+
+          Just PartialUse ->
+            "Use..."
+
+          Just (PartialUseOne thing) ->
+            "Use " ++ Narrative.nameOf thing ++ " with..."
+        )
+    ]
 
 
 commandButton : Address Action -> ( Command, String ) -> Html
