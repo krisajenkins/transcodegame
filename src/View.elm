@@ -13,18 +13,21 @@ import View.Svg
 root : Address Action -> Model -> Html
 root address model =
   div
-    [ style [ ( "margin", "0 100px" ) ]
+    [ style
+        [ ( "width", (px (17 * View.Svg.tileSize)) )
+        , ( "height", (px (8 * View.Svg.tileSize)) )
+        , ( "margin", "0 auto" )
+        ]
     ]
     [ div
         [ style
             [ ( "perspective", px 1000 )
-            , ( "width", (px (20 * View.Svg.tileSize)) )
-            , ( "height", (px (8 * View.Svg.tileSize)) )
+            , ( "text-align", "center" )
             ]
         ]
         [ div
             [ style
-                [ ( "transform", "rotate3d(1,0,0,45deg)" )
+                [ ( "transform", "rotate3d(1,0,0,35deg)" )
                 , ( "width", pct 100 )
                 , ( "height", pct 100 )
                 ]

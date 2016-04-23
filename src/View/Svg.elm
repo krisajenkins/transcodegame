@@ -18,7 +18,7 @@ tileSize =
 root : Address Action -> Model -> Html
 root address model =
   svg
-    [ width (px (20 * tileSize))
+    [ width (px (18 * tileSize))
     , height (px (8 * tileSize))
     ]
     [ g
