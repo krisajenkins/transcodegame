@@ -13,7 +13,8 @@ import View.Svg
 root : Address Action -> Model -> Html
 root address model =
   div
-    [ style
+    [ id "main-content"
+    , style
         [ ( "width", (px (19 * View.Svg.tileSize)) )
         , ( "height", (px (12 * View.Svg.tileSize)) )
         , ( "margin", "0 auto" )
@@ -35,11 +36,8 @@ root address model =
             ]
             [ View.Svg.root address model ]
         ]
-    , div
-        [ style
-            [ ( "font-size", px 24 )
-            ]
-        ]
+    , p
+        [ class "dialogue" ]
         [ text (Maybe.withDefault "" model.dialogue) ]
     , div
         [ class "btn-group" ]
@@ -60,7 +58,9 @@ inventoryView address inventory =
   div
     []
     [ h4 [] [ text "Inventory" ]
-    , div [] (List.map (inventoryObjectView address) inventory)
+    , div
+        [ class "inventory" ]
+        (List.map (inventoryObjectView address) inventory)
     ]
 
 
