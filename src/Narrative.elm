@@ -433,38 +433,3 @@ handleUse object otherObject model =
 
     _ ->
       Nothing
-
-
-combineItems : Object -> Object -> Object -> Model -> Model
-combineItems obj1 obj2 result model =
-  addItem result (removeItems [ obj1, obj2 ] model)
-
-
-addItem : Object -> Model -> Model
-addItem item model =
-  let
-    newInventory =
-      item :: model.player.inventory
-
-    player =
-      model.player
-
-    newPlayer =
-      { player | inventory = newInventory }
-  in
-    { model | player = newPlayer }
-
-
-removeItems : List Object -> Model -> Model
-removeItems items model =
-  let
-    newInventory =
-      List.filter (not << flip List.member items) model.player.inventory
-
-    player =
-      model.player
-
-    newPlayer =
-      { player | inventory = newInventory }
-  in
-    { model | player = newPlayer }
