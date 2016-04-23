@@ -19,7 +19,7 @@ root : Address Action -> Model -> Html
 root address model =
   svg
     [ width (px (18 * tileSize))
-    , height (px (8 * tileSize))
+    , height (px (11 * tileSize))
     ]
     [ g
         []

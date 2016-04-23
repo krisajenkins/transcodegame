@@ -40,7 +40,7 @@ initialWorld =
       ( 0, 0 )
 
     ( maxX, maxY ) =
-      ( 15, 7 )
+      ( 17, 10 )
 
     xRange =
       [minX..maxX]
@@ -60,14 +60,25 @@ initialWorld =
       , verticalWall maxX yRange
       , horizontalWall xRange minY
       , horizontalWall xRange maxY
-      , horizontalWall [4..10] 4
-      , verticalWall 4 [4..6]
-      , verticalWall 8 [2..6]
-      , horizontalWall [12..13] 2
-      , [ ( ( 9, 6 )
-          , Thing Cinzano
-          )
-        ]
+      , verticalWall 5 [1..4]
+      , horizontalWall [5..8] 4
+      , verticalWall 12 [1..3]
+      , horizontalWall [5..8] 6
+      , verticalWall 5 [6..9]
+      , horizontalWall [10..12] 6
+      , verticalWall 12 [5..9]
+      , verticalWall 16 [4..6]
+      , [ ( ( 8, 1 ), Block ) ]
+      , [ ( ( 8, 3 ), Block ) ]
+      , [ ( ( 1, 4 ), Thing Chicken ) ]
+      , [ ( ( 1, 5 ), Thing Postbox ) ]
+      , [ ( ( 6, 3 ), Thing PotatoSackFull ) ]
+      , [ ( ( 11, 2 ), Thing Fridge ) ]
+      , [ ( ( 14, 2 ), Thing Lighter ) ]
+      , [ ( ( 15, 2 ), Thing Still ) ]
+      , [ ( ( 6, 9 ), Thing Rag ) ]
+      , [ ( ( 7, 7 ), Thing Paperwork ) ]
+      , [ ( ( 11, 9 ), Thing Cinzano ) ]
       ]
     )
       |> Dict.fromList

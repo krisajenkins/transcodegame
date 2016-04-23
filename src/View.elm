@@ -14,8 +14,8 @@ root : Address Action -> Model -> Html
 root address model =
   div
     [ style
-        [ ( "width", (px (17 * View.Svg.tileSize)) )
-        , ( "height", (px (8 * View.Svg.tileSize)) )
+        [ ( "width", (px (19 * View.Svg.tileSize)) )
+        , ( "height", (px (12 * View.Svg.tileSize)) )
         , ( "margin", "0 auto" )
         ]
     ]

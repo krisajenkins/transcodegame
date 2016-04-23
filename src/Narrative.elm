@@ -209,6 +209,9 @@ examine obj =
     Stamps ->
       "This looks like just about enough to send a really big parcel. You may die of dehydration whilst sticking them down though."
 
+    Still ->
+      "This looks perfect for making potato moonshine."
+
     UselessVaseEmpty ->
       "This vase is useless. Absolutely useless. Why are you still looking at it?"
 
