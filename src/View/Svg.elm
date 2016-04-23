@@ -12,7 +12,7 @@ import Dict
 
 tileSize : Int
 tileSize =
-  50
+  45
 
 
 root : Address Action -> Model -> Html
