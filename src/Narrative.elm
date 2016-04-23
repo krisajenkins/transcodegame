@@ -1,5 +1,6 @@
 module Narrative (..) where
 
+import Set exposing(Set)
 import Types exposing (..)
 import Dict
 
@@ -16,9 +17,12 @@ handleCommand command model =
         , Just "Chaaaaarrrrrrge!"
         )
       else
-        ( model
-        , Just "Hmmm...that looks like that would hurt."
-        )
+        let neighbours = validMovesFrom model.world newDestination in
+        case List.head (Set.toList neighbours) of
+          Nothing -> ( model
+                     , Just "Hmmm...that looks like that would hurt."
+                     )
+          Just pos -> handleCommand (WalkTo pos) model
 
     PartialCommand partial ->
       ( { model | partialCommand = Just partial }
