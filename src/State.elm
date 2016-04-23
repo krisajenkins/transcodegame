@@ -151,21 +151,7 @@ handleWalk time model =
                       | destination = Nothing
                       , timeSinceLastMove = Nothing
                     }
-                  , case objectAt model.world model.player.position of
-                      Nothing ->
-                        Nothing
-
-                      Just Character ->
-                        Just "Hello."
-
-                      Just Path ->
-                        Just "It's nice here."
-
-                      Just Block ->
-                        Just "Help, I'm stuck in a wall!"
-
-                      Just (Thing Cinzano) ->
-                        Just ("Cinzano. Looks awful.")
+                  , Just "J'arrive!"
                   )
 
                 Just p ->
