@@ -32,8 +32,8 @@ type Object
   | UselessVaseFull
   | WheelbarrowBroken
   | WheelbarrowFixed
+  | WheelbarrowFull
   | ThePlayer
-  | Unknown
 
 
 type Cell
@@ -131,8 +131,62 @@ validMovesFrom world position =
 canPickUp : Object -> Bool
 canPickUp object =
   case object of
+    BlackBiro ->
+      True
+
+    Chicken ->
+      True
+
     Cinzano ->
       True
 
-    _ ->
+    Molotov ->
+      True
+
+    Package ->
+      False
+
+    Paperwork ->
+      False
+
+    PaperworkDone ->
+      False
+
+    Parcel ->
+      False
+
+    Postbox ->
+      False
+
+    PotatoSackEmpty ->
+      True
+
+    PotatoSackFull ->
+      True
+
+    Rag ->
+      True
+
+    Shed ->
+      False
+
+    Stamps ->
+      True
+
+    UselessVaseEmpty ->
+      True
+
+    UselessVaseFull ->
+      True
+
+    WheelbarrowBroken ->
+      False
+
+    WheelbarrowFixed ->
+      True
+
+    WheelbarrowFull ->
+      True
+
+    ThePlayer ->
       False

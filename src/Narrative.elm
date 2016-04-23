@@ -106,11 +106,6 @@ handleCommand command model =
       ( model, Just "I'm sorry, I can't do that." )
 
 
-
--- _ ->
---   ( model, Just "I'm sorry, I can't do that." )
-
-
 handleHint : Command -> Model -> Maybe String
 handleHint command model =
   case command of
@@ -135,24 +130,60 @@ nameOf obj =
 examine : Object -> String
 examine obj =
   case obj of
-    BlackBiro -> "It's a biro. It writes in black ink. This looks perfect for filling in official documents."
-    Chicken -> "It's a rubber chicken with a pulley in the middle."
-    Cinzano -> "Smells vaguely of petrol.  Why would it ever be half-empty?"
-    Molotov -> "Slightly less lethal than its components"
-    Package -> "The paperwork fits snugly inside the potato sack, making a beautifully wrapped package. None of the paperwork will get lost now."
-    Paperwork -> "This stack of unfinished paperwork looks more and more intimidating the longer you spend looking at it. You really need to fill it in today."
-    PaperworkDone -> "The finished paperwork represents hours of work. But you can't send it like this, or most of it will get lost in the post, or eaten by beavers."
-    Parcel -> "A beautifully wrapped, but slightly enormous, stamped and addressed parcel, ready for posting."
-    Postbox -> "A shining symbol of the postal system. It has an unusually large opening for parcels. I think you could probably get an elephant through that."
-    PotatoSackEmpty -> "An empty potato sack. Perfect for filling with heavy things that need to stay together."
-    PotatoSackFull -> "Boil 'em, mash 'em, stick 'em in a stew."
-    Rag -> "Upon closer examination, you realise this rag used to be a pair of underwear. Whose underwear? Who knows."
-    Shed -> "A flimsy wooden shed, the door to which has been stuck for years. There might be something inside, but you can't get to it. The wood looks flammable."
-    Stamps -> "This looks like just about enough to send a really big parcel. You may die of dehydration whilst sticking them down though."
-    UselessVaseEmpty -> "This vase is useless. Absolutely useless. Why are you still looking at it?"
-    UselessVaseFull -> "This is a useless and ugly vase. No wonder you don't have it out on display. For some reason, it seems to be filled with stamps rather than flowers."
-    WheelbarrowBroken -> "This wheelbarrow doesn't have a working wheel. Might as well just call it a barrow."
-    WheelbarrowFixed -> "This looks like you could use it to transport something heavy."
+    BlackBiro ->
+      "It's a biro. It writes in black ink. This looks perfect for filling in official documents."
+
+    Chicken ->
+      "It's a rubber chicken with a pulley in the middle."
+
+    Cinzano ->
+      "Smells vaguely of petrol.  Why would it ever be half-empty?"
+
+    Molotov ->
+      "Slightly less lethal than its components"
+
+    Package ->
+      "The paperwork fits snugly inside the potato sack, making a beautifully wrapped package. None of the paperwork will get lost now."
+
+    Paperwork ->
+      "This stack of unfinished paperwork looks more and more intimidating the longer you spend looking at it. You really need to fill it in today."
+
+    PaperworkDone ->
+      "The finished paperwork represents hours of work. But you can't send it like this, or most of it will get lost in the post, or eaten by beavers."
+
+    Parcel ->
+      "A beautifully wrapped, but slightly enormous, stamped and addressed parcel, ready for posting."
+
+    Postbox ->
+      "A shining symbol of the postal system. It has an unusually large opening for parcels. I think you could probably get an elephant through that."
+
+    PotatoSackEmpty ->
+      "An empty potato sack. Perfect for filling with heavy things that need to stay together."
+
+    PotatoSackFull ->
+      "Boil 'em, mash 'em, stick 'em in a stew."
+
+    Rag ->
+      "Upon closer examination, you realise this rag used to be a pair of underwear. Whose underwear? Who knows."
+
+    Shed ->
+      "A flimsy wooden shed, the door to which has been stuck for years. There might be something inside, but you can't get to it. The wood looks flammable."
+
+    Stamps ->
+      "This looks like just about enough to send a really big parcel. You may die of dehydration whilst sticking them down though."
+
+    UselessVaseEmpty ->
+      "This vase is useless. Absolutely useless. Why are you still looking at it?"
+
+    UselessVaseFull ->
+      "This is a useless and ugly vase. No wonder you don't have it out on display. For some reason, it seems to be filled with stamps rather than flowers."
+
+    WheelbarrowBroken ->
+      "This wheelbarrow doesn't have a working wheel. Might as well just call it a barrow."
+
+    WheelbarrowFixed ->
+      "This looks like you could use it to transport something heavy."
+
     -- TODO To be removed when pattern matching is complete
     --      (or replace with Unknown)
     _ ->
