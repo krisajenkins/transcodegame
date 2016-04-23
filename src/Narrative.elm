@@ -151,12 +151,19 @@ handleCommand command model =
       )
 
     Examine UselessVaseFull ->
-      ( addItem Stamps (addItem UselessVaseEmpty (removeItems [ UselessVaseFull ] model)), Just (examine UselessVaseFull) )
+      ( model
+          |> removeItems [ UselessVaseFull ]
+          |> addItem UselessVaseEmpty
+          |> addItem Stamps
+      , Just (examine UselessVaseFull)
+      )
 
     Examine Fridge ->
       let
         newInventory =
-          addItem UselessVaseFull (addItem BlackBiro model)
+          model
+            |> addItem BlackBiro
+            |> addItem UselessVaseFull
       in
         ( { newInventory | world = Dict.insert ( 11, 2 ) (Thing FridgeEmpty) newInventory.world }, Just (examine Fridge) )
 
@@ -347,7 +354,8 @@ handleUse object otherObject model =
 
     ( BlackBiro, Paperwork ) ->
       Just
-        ( removeItems [ BlackBiro, Paperwork ] { model | world = Dict.insert ( 7, 7 ) (Thing PaperworkDone) model.world }
+        ( { model | world = Dict.insert ( 7, 7 ) (Thing PaperworkDone) model.world }
+            |> removeItems [ BlackBiro, Paperwork ]
         , Just "The black biro allows you to fill out the stack of paperwork after a while.  A very, very long while."
         )
 
@@ -392,26 +400,30 @@ handleUse object otherObject model =
 
     ( WheelbarrowBroken, Chicken ) ->
       Just
-        (handleCommand
-          (PickUp ( 16, 5 ) WheelbarrowFixed)
-          (removeItems [ Chicken ] model)
+        (model
+          |> removeItems [ Chicken ]
+          |> handleCommand (PickUp ( 16, 5 ) WheelbarrowFixed)
         )
 
     ( Still, PotatoSackFull ) ->
       Just
-        ( addItem PotatoSackEmpty (removeItems [ PotatoSackFull ] model)
+        ( model
+            |> removeItems [ PotatoSackFull ]
+            |> addItem PotatoSackEmpty
         , Just "You empty the potatoes into the still and find yourself with an empty potato sack."
         )
 
     ( PotatoSackEmpty, PaperworkDone ) ->
       Just
-        ( removeItems [ PotatoSackEmpty ] { model | world = Dict.insert ( 7, 7 ) (Thing Package) model.world }
+        ( { model | world = Dict.insert ( 7, 7 ) (Thing Package) model.world }
+            |> removeItems [ PotatoSackEmpty ]
         , Just "Sticking the paperwork into the potato sack makes what could just about pass as a package.  Good job!"
         )
 
     ( Stamps, Package ) ->
       Just
-        ( removeItems [ Stamps ] { model | world = Dict.insert ( 7, 7 ) (Thing Parcel) model.world }
+        ( { model | world = Dict.insert ( 7, 7 ) (Thing Parcel) model.world }
+            |> removeItems [ Stamps ]
         , Just "It takes a lot of licking, but you cover the parcel in stamps eventually.  Might need a drinks break before you do anything else though."
         )
 
@@ -424,7 +436,9 @@ handleUse object otherObject model =
 
     ( WheelbarrowFull, Postbox ) ->
       Just
-        ( addItem WheelbarrowFixed (removeItems [ WheelbarrowFull ] model)
+        ( model
+            |> removeItems [ WheelbarrowFull ]
+            |> addItem WheelbarrowFixed
         , Just "Emptying the contents of the wheelbarrow into the postbox, you give a sigh of relief.  Now all that there's left to do is to wait for it to be processed, and pray that bureaucracy will be merciful on you."
         )
 
