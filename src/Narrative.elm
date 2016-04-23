@@ -263,7 +263,7 @@ examine obj =
       "Smells vaguely of petrol.  Why would it ever be half-empty?"
 
     Fridge ->
-      "You open the fridge and bask in the sickly glow of the interior. Looking closely, you notice the ugliest vase you have ever seen, and for some reason, a biro embedded in the butter dish."
+      "You open the fridge and bask in the sickly glow of the interior. Looking closely, you notice the ugliest vase you have ever seen, and for some reason, biros embedded in the butter dish."
 
     FridgeEmpty ->
       "It looks just the same, minus random stationary and hideous glassware."
