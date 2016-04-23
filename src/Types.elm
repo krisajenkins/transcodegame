@@ -213,36 +213,40 @@ canPickUp object =
       False
 
 
-combineItems : Object -> Object -> Object -> Model -> Model
-combineItems obj1 obj2 result model =
-  addItem result (removeItems [ obj1, obj2 ] model)
-
-
 addItem : Object -> Model -> Model
 addItem item model =
   let
-    newInventory =
-      item :: model.player.inventory
-
     player =
       model.player
-
-    newPlayer =
-      { player | inventory = newInventory }
   in
-    { model | player = newPlayer }
+    { model
+      | player =
+          { player
+            | inventory =
+                item :: model.player.inventory
+          }
+    }
 
 
 removeItems : List Object -> Model -> Model
 removeItems items model =
   let
-    newInventory =
-      List.filter (not << flip List.member items) model.player.inventory
-
     player =
       model.player
-
-    newPlayer =
-      { player | inventory = newInventory }
   in
-    { model | player = newPlayer }
+    { model
+      | player =
+          { player
+            | inventory =
+                List.filter
+                  (not << flip List.member items)
+                  model.player.inventory
+          }
+    }
+
+
+combineItems : Object -> Object -> Object -> Model -> Model
+combineItems obj1 obj2 result model =
+  model
+    |> removeItems [ obj1, obj2 ]
+    |> addItem result
