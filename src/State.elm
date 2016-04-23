@@ -84,6 +84,7 @@ initialModel =
       , inventory = []
       }
   , destination = Nothing
+  , queuedCommand = Nothing
   , timeSinceLastMove = Nothing
   }
 
@@ -147,12 +148,19 @@ handleWalk time model =
             Just path ->
               case Array.get 0 path of
                 Nothing ->
-                  ( { model
-                      | destination = Nothing
-                      , timeSinceLastMove = Nothing
-                    }
-                  , Just "J'arrive!"
-                  )
+                  let
+                    newModel =
+                      { model
+                        | destination = Nothing
+                        , timeSinceLastMove = Nothing
+                      }
+                  in
+                    case model.queuedCommand of
+                      Nothing ->
+                        ( newModel, Just "J'arrive!" )
+
+                      Just command ->
+                        handleCommand command newModel
 
                 Just p ->
                   let

@@ -76,6 +76,7 @@ type alias Model =
   , hint : Maybe String
   , partialCommand : Maybe PartialCommand
   , destination : Maybe Position
+  , queuedCommand : Maybe Command
   , timeSinceLastMove : Maybe Time
   }
 

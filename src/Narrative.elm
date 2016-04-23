@@ -1,6 +1,6 @@
 module Narrative (..) where
 
-import Set exposing(Set)
+import Set exposing (Set)
 import Types exposing (..)
 import Dict
 
@@ -9,20 +9,29 @@ handleCommand : Command -> Model -> ( Model, Maybe String )
 handleCommand command model =
   case command of
     WalkTo newDestination ->
-      if canStandOn (objectAt model.world newDestination) then
-        ( { model
-            | destination = Just newDestination
-            , partialCommand = Nothing
-          }
-        , Just "Chaaaaarrrrrrge!"
-        )
+      if newDestination /= model.player.position then
+        if canStandOn (objectAt model.world newDestination) then
+          ( { model
+              | destination = Just newDestination
+              , partialCommand = Nothing
+            }
+          , Just "Chaaaaarrrrrrge!"
+          )
+        else
+          let
+            neighbours =
+              validMovesFrom model.world newDestination
+          in
+            case List.head (Set.toList neighbours) of
+              Nothing ->
+                ( model
+                , Just "Hmmm...that looks like that would hurt."
+                )
+
+              Just pos ->
+                handleCommand (WalkTo pos) model
       else
-        let neighbours = validMovesFrom model.world newDestination in
-        case List.head (Set.toList neighbours) of
-          Nothing -> ( model
-                     , Just "Hmmm...that looks like that would hurt."
-                     )
-          Just pos -> handleCommand (WalkTo pos) model
+        ( model, Just "I'm already there." )
 
     PartialCommand partial ->
       ( { model | partialCommand = Just partial }
@@ -101,7 +110,7 @@ handleCommand command model =
       case model.partialCommand of
         Just PartialPickUp ->
           { model | partialCommand = Nothing }
-            |> handleCommand (PickUp position object)
+            |> handleWalkThen position (PickUp position object)
 
         _ ->
           handleCommand (Interact (Thing object)) model
@@ -117,6 +126,11 @@ handleCommand command model =
 
     Examine obj ->
       ( model, Just (examine obj) )
+
+
+handleWalkThen : Position -> Command -> Model -> ( Model, Maybe String )
+handleWalkThen pos com model =
+  handleCommand (WalkTo pos) { model | queuedCommand = Just com }
 
 
 handleHint : Command -> Model -> Maybe String
@@ -196,17 +210,12 @@ examine obj =
 
     WheelbarrowFixed ->
       "This looks like you could use it to transport something heavy."
-    
+
     WheelbarrowFull ->
-     "Your precious paperwork, all packaged and ready to roll. Literally."
+      "Your precious paperwork, all packaged and ready to roll. Literally."
 
     ThePlayer ->
-     "Hey, I look great today! Especially for somebody who had way too many Cinzanos last night."
-
-    -- TODO To be removed when pattern matching is complete
-    --      (or replace with Unknown)
-    _ ->
-      "I have no idea what this.  I don't think it knows what it is."
+      "Hey, I look great today! Especially for somebody who had way too many Cinzanos last night."
 
 
 handleUse : Object -> Object -> Model -> Maybe ( Model, Maybe String )
