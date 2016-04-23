@@ -39,22 +39,13 @@ root address model =
         [ text (Maybe.withDefault "" model.dialogue) ]
     , div
         [ class "btn-group" ]
-        [ button
-            [ class "btn btn-lg btn-info"
-            , onClick address (PlayerCommand (PartialCommand PartialPickUp))
-            ]
-            [ text "Pick up" ]
-        , button
-            [ class "btn btn-lg btn-info"
-            , onClick address (PlayerCommand (PartialCommand PartialExamine))
-            ]
-            [ text "Examine" ]
-        , button
-            [ class "btn btn-lg btn-info"
-            , onClick address (PlayerCommand (PartialCommand PartialUse))
-            ]
-            [ text "Use" ]
-        ]
+        (List.map
+          (commandButton address)
+          [ ( PartialCommand PartialPickUp, "Pick up" )
+          , ( PartialCommand PartialExamine, "Examine" )
+          , ( PartialCommand PartialUse, "Use" )
+          ]
+        )
     , inventoryView address model.player.inventory
     , hintView model.hint
     , div
@@ -113,3 +104,12 @@ inventoryObjectView address object =
     , onClick address (PlayerCommand (Interact (Thing object)))
     ]
     [ text (toString object) ]
+
+
+commandButton : Address Action -> ( Command, String ) -> Html
+commandButton address ( command, title ) =
+  button
+    [ class "btn btn-lg btn-info"
+    , onClick address (PlayerCommand command)
+    ]
+    [ text title ]
