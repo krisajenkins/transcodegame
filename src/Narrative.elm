@@ -165,19 +165,19 @@ examine obj =
       "Smells vaguely of petrol.  Why would it ever be half-empty?"
 
     Fridge ->
-     "You open the fridge and bask in the sickly glow of the interior. Looking closely, you notice the ugliest vase you have ever seen, and for some reason, a biro embedded in the butter dish."
+      "You open the fridge and bask in the sickly glow of the interior. Looking closely, you notice the ugliest vase you have ever seen, and for some reason, a biro embedded in the butter dish."
 
     FridgeEmpty ->
-     "It looks just the same, minus random stationary and hideous glassware."
+      "It looks just the same, minus random stationary and hideous glassware."
 
     Lighter ->
-     "Probably good for lighting things on fire. Just a guess."
+      "Probably good for lighting things on fire. Just a guess."
 
     Molotov ->
       "Slightly less lethal than its components"
 
     MolotovLit ->
-     "Might wanna throw this in the next few minutes. Just an idea. Maybe at something that will burn."
+      "Might wanna throw this in the next few minutes. Just an idea. Maybe at something that will burn."
 
     Package ->
       "The paperwork fits snugly inside the potato sack, making a beautifully wrapped package. None of the paperwork will get lost now."
