@@ -1,6 +1,7 @@
 module View (root) where
 
 import Common.View exposing (..)
+import Narrative
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -17,8 +18,8 @@ root address model =
     [ div
         [ style
             [ ( "perspective", px 1000 )
-            , ( "width", px 800 )
-            , ( "height", px 300 )
+            , ( "width", (px (20 * View.Svg.tileSize)) )
+            , ( "height", (px (8 * View.Svg.tileSize)) )
             ]
         ]
         [ div
@@ -45,13 +46,40 @@ root address model =
             [ text "Pick up" ]
         , button
             [ class "btn btn-lg btn-info"
+            , onClick address (PlayerCommand (PartialCommand PartialExamine))
+            ]
+            [ text "Examine" ]
+        , button
+            [ class "btn btn-lg btn-info"
             , onClick address (PlayerCommand (PartialCommand PartialUse))
             ]
             [ text "Use" ]
         ]
     , inventoryView address model.player.inventory
     , hintView model.hint
-    , div [ class "alert alert-danger" ] [ code [] [ text (toString model.partialCommand) ] ]
+    , div
+        [ class "alert alert-info" ]
+        [ code
+            []
+            [ text
+                (case model.partialCommand of
+                  Nothing ->
+                    ""
+
+                  Just PartialPickUp ->
+                    "Pick up..."
+
+                  Just PartialExamine ->
+                    "Examine..."
+
+                  Just PartialUse ->
+                    "Use..."
+
+                  Just (PartialUseOne thing) ->
+                    "Use " ++ Narrative.nameOf thing ++ " with..."
+                )
+            ]
+        ]
     ]
 
 
@@ -82,6 +110,6 @@ inventoryObjectView : Address Action -> Object -> Html
 inventoryObjectView address object =
   button
     [ class "btn btn.info"
-    , onClick address (PlayerCommand (Examine object))
+    , onClick address (PlayerCommand (Interact (Thing object)))
     ]
     [ text (toString object) ]

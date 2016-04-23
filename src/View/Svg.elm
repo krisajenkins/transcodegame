@@ -1,4 +1,4 @@
-module View.Svg (root) where
+module View.Svg (root, tileSize) where
 
 import Common.View exposing (..)
 import Signal exposing (..)
@@ -12,14 +12,14 @@ import Dict
 
 tileSize : Int
 tileSize =
-  40
+  50
 
 
 root : Address Action -> Model -> Html
 root address model =
   svg
-    [ width (px 800)
-    , height (px 320)
+    [ width (px (20 * tileSize))
+    , height (px (8 * tileSize))
     ]
     [ g
         []
@@ -27,7 +27,7 @@ root address model =
           |> Dict.toList
           |> List.map (uncurry (tile address))
         )
-    , tile address model.player.position Character
+    , tile address model.player.position (Thing ThePlayer)
     ]
 
 
@@ -46,14 +46,14 @@ tile address position cell =
           , Just (WalkTo position)
           )
 
-        Character ->
+        Thing ThePlayer ->
           ( [ stroke "#8504da", fill "#e4049a" ]
-          , Nothing
+          , Just (InteractAt position (Thing ThePlayer))
           )
 
         Thing object ->
           ( [ stroke "black", fill "yellow" ]
-          , Just (Interact position (Thing object))
+          , Just (InteractAt position (Thing object))
           )
   in
     rect

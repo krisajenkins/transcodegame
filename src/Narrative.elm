@@ -38,26 +38,31 @@ handleCommand command model =
           )
       )
 
-    PickUp position Cinzano ->
-      let
-        player =
-          model.player
+    PickUp position ThePlayer ->
+      ( model, Just "That was a real pick-me-up!" )
 
-        newModel =
-          { model
-            | world = Dict.insert position Path model.world
-            , player = { player | inventory = Cinzano :: player.inventory }
-          }
-      in
-        ( newModel, Just "Just don't make me drink it." )
+    PickUp position thing ->
+      if canPickUp thing then
+        let
+          player =
+            model.player
 
-    Examine Cinzano ->
-      ( model, Just "The party isn't over 'til there only Cinzano left to drink." )
+          newModel =
+            { model
+              | world = Dict.insert position Path model.world
+              , player = { player | inventory = thing :: player.inventory }
+            }
+        in
+          ( newModel, Just "I've got it." )
+      else
+        ( model, Just "I can't pick that up." )
 
-    Interact position (Thing object) ->
+    Interact (Thing object) ->
       case model.partialCommand of
         Just PartialPickUp ->
-          handleCommand (PickUp position object) model
+          ( { model | partialCommand = Nothing }
+          , Just "I've already got it."
+          )
 
         Just PartialUse ->
           ( { model | partialCommand = Just (PartialUseOne object) }
@@ -65,22 +70,45 @@ handleCommand command model =
           )
 
         Just (PartialUseOne otherObject) ->
-          if object == otherObject then
-            ( model, Just "I can't use something with itself." )
-          else
-            handleCommand (Use object otherObject) model
+          let
+            newModel =
+              { model | partialCommand = Nothing }
+          in
+            Maybe.oneOf
+              [ handleUse object otherObject newModel
+              , handleUse otherObject object newModel
+              ]
+              |> Maybe.withDefault ( model, Just "It's not going to work." )
 
         Just PartialExamine ->
-          handleCommand (Examine object) model
+          { model | partialCommand = Nothing }
+            |> handleCommand (Examine object)
 
         Nothing ->
           handleCommand (Examine object) model
+
+    InteractAt position (Thing object) ->
+      case model.partialCommand of
+        Just PartialPickUp ->
+          { model | partialCommand = Nothing }
+            |> handleCommand (PickUp position object)
+
+        _ ->
+          handleCommand (Interact (Thing object)) model
+
+    Examine Cinzano ->
+      ( model, Just "The party isn't over 'til there only Cinzano left to drink." )
 
     Examine obj ->
       ( model, Just (examine obj) )
 
     _ ->
       ( model, Just "I'm sorry, I can't do that." )
+
+
+
+-- _ ->
+--   ( model, Just "I'm sorry, I can't do that." )
 
 
 handleHint : Command -> Model -> Maybe String
@@ -92,6 +120,17 @@ handleHint command model =
 
     _ ->
       Nothing
+
+
+nameOf : Object -> String
+nameOf obj =
+  case obj of
+    ThePlayer ->
+      "Myself"
+
+    _ ->
+      toString obj
+
 
 examine : Object -> String
 examine obj =
@@ -116,4 +155,21 @@ examine obj =
     WheelbarrowFixed -> "This looks like you could use it to transport something heavy."
     -- TODO To be removed when pattern matching is complete
     --      (or replace with Unknown)
-    _ -> "I have no idea what this.  I don't think it knows what it is."
+    _ ->
+      "I have no idea what this.  I don't think it knows what it is."
+
+
+handleUse : Object -> Object -> Model -> Maybe ( Model, Maybe String )
+handleUse object otherObject model =
+  if object == otherObject then
+    Just
+      ( model
+      , Just "I can't use something with itself."
+      )
+  else
+    case ( object, otherObject ) of
+      ( Cinzano, ThePlayer ) ->
+        Just ( model, Just "There. Is. No. Way. I. Will. Drink. Cinzano." )
+
+      _ ->
+        Nothing

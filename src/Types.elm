@@ -32,13 +32,13 @@ type Object
   | UselessVaseFull
   | WheelbarrowBroken
   | WheelbarrowFixed
+  | ThePlayer
   | Unknown
 
 
 type Cell
   = Block
   | Path
-  | Character
   | Thing Object
 
 
@@ -54,7 +54,8 @@ type Command
   | PickUp Position Object
   | Examine Object
   | Use Object Object
-  | Interact Position Cell
+  | Interact Cell
+  | InteractAt Position Cell
   | PartialCommand PartialCommand
 
 
@@ -94,9 +95,6 @@ canStandOn cell =
     Just Block ->
       False
 
-    Just Character ->
-      False
-
 
 objectAt : World Cell -> Position -> Maybe Cell
 objectAt =
@@ -128,3 +126,13 @@ validMovesFrom world position =
   Set.filter
     (canStandOn << objectAt world)
     (movesFrom position)
+
+
+canPickUp : Object -> Bool
+canPickUp object =
+  case object of
+    Cinzano ->
+      True
+
+    _ ->
+      False
