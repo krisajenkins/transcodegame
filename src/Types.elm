@@ -209,20 +209,5 @@ canPickUp object =
     WheelbarrowFull ->
       True
 
-    Fridge ->
-      False
-
-    FridgeEmpty ->
-      False
-
-    Lighter ->
-      True
-
-    MolotovLit ->
-      True
-
-    Still ->
-      False
-
     ThePlayer ->
       False
