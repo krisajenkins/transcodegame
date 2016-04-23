@@ -11704,7 +11704,7 @@ Elm.Narrative.make = function (_elm) {
          case "Chicken": return "It\'s a rubber chicken with a pulley in the middle.";
          case "Cinzano": return "Smells vaguely of petrol.  Why would it ever be half-empty?";
          case "Fridge":
-         return "You open the fridge and bask in the sickly glow of the interior. Looking closely, you notice the ugliest vase you have ever seen, and for some reason, a biro embedded in the butter dish.";
+         return "You open the fridge and bask in the sickly glow of the interior. Looking closely, you notice the ugliest vase you have ever seen, and for some reason, biros embedded in the butter dish.";
          case "FridgeEmpty": return "It looks just the same, minus random stationary and hideous glassware.";
          case "Lighter": return "Probably good for lighting things on fire. Just a guess.";
          case "Molotov": return "Slightly less lethal than its components";
@@ -11907,7 +11907,11 @@ Elm.Narrative.make = function (_elm) {
                                               $Types.Stamps,
                                               A2(addItem,$Types.UselessVaseEmpty,A2(removeItems,_U.list([$Types.UselessVaseFull]),model)))
                                               ,_1: $Maybe.Just(examine($Types.UselessVaseFull))};
-                 case "Fridge": return {ctor: "_Tuple2",_0: A2(addItem,$Types.BlackBiro,model),_1: $Maybe.Just(examine($Types.Fridge))};
+                 case "Fridge": var newInventory = A2(addItem,$Types.UselessVaseFull,A2(addItem,$Types.BlackBiro,model));
+                   return {ctor: "_Tuple2"
+                          ,_0: _U.update(newInventory,
+                          {world: A3($Dict.insert,{ctor: "_Tuple2",_0: 11,_1: 2},$Types.Thing($Types.FridgeEmpty),newInventory.world)})
+                          ,_1: $Maybe.Just(examine($Types.Fridge))};
                  default: return {ctor: "_Tuple2",_0: model,_1: $Maybe.Just(examine(_p4._0))};}}
       }
    });
@@ -11929,7 +11933,10 @@ Elm.Narrative.make = function (_elm) {
                                                               ,_1: $Maybe.Just("What part of the word \'useless\' do you not understand?")});
                   case "BlackBiro": if (_p19._1.ctor === "Paperwork") {
                           return $Maybe.Just({ctor: "_Tuple2"
-                                             ,_0: A4(combineItems,$Types.BlackBiro,$Types.Paperwork,$Types.PaperworkDone,model)
+                                             ,_0: A2(removeItems,
+                                             _U.list([$Types.BlackBiro,$Types.Paperwork]),
+                                             _U.update(model,
+                                             {world: A3($Dict.insert,{ctor: "_Tuple2",_0: 7,_1: 7},$Types.Thing($Types.PaperworkDone),model.world)}))
                                              ,_1: $Maybe.Just("The black biro allows you to fill out the stack of paperwork after a while.  A very, very long while.")});
                        } else {
                           break _v26_14;
@@ -11978,14 +11985,16 @@ Elm.Narrative.make = function (_elm) {
                        }
                   case "Still": if (_p19._1.ctor === "PotatoSackFull") {
                           return $Maybe.Just({ctor: "_Tuple2"
-                                             ,_0: A2(removeItems,_U.list([$Types.PotatoSackFull]),model)
+                                             ,_0: A2(addItem,$Types.PotatoSackEmpty,A2(removeItems,_U.list([$Types.PotatoSackFull]),model))
                                              ,_1: $Maybe.Just("You empty the potatoes into the still and find yourself with an empty potato sack.")});
                        } else {
                           break _v26_14;
                        }
                   case "PotatoSackEmpty": if (_p19._1.ctor === "PaperworkDone") {
                           return $Maybe.Just({ctor: "_Tuple2"
-                                             ,_0: A4(combineItems,$Types.PotatoSackEmpty,$Types.PaperworkDone,$Types.Package,model)
+                                             ,_0: A2(removeItems,
+                                             _U.list([$Types.PotatoSackEmpty]),
+                                             _U.update(model,{world: A3($Dict.insert,{ctor: "_Tuple2",_0: 7,_1: 7},$Types.Thing($Types.Package),model.world)}))
                                              ,_1: $Maybe.Just("Sticking the paperwork into the potato sack makes what could just about pass as a package.  Good job!")});
                        } else {
                           break _v26_14;
