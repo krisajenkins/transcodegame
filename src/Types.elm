@@ -14,7 +14,23 @@ type alias World a =
 
 
 type Object
-  = Cinzano
+  = BlackBiro
+  | BlueBiro
+  | Cinzano
+  | Chicken
+  | Molotov
+  | Package
+  | Paperwork
+  | PaperworkDone
+  | Parcel
+  | Postbox
+  | PotatoSackEmpty
+  | PotatoSackFull
+  | Rag
+  | Shed
+  | Stamps
+  | WheelbarrowBroken
+  | WheelbarrowFixed
 
 
 type Cell
