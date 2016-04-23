@@ -17,7 +17,11 @@ type Object
   = BlackBiro
   | Chicken
   | Cinzano
+  | Fridge
+  | FridgeEmpty
+  | Lighter
   | Molotov
+  | MolotovLit
   | Package
   | Paperwork
   | PaperworkDone
@@ -28,6 +32,7 @@ type Object
   | Rag
   | Shed
   | Stamps
+  | Still
   | UselessVaseEmpty
   | UselessVaseFull
   | WheelbarrowBroken
