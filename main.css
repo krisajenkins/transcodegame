@@ -1,0 +1,17 @@
+body {
+  font-family: 'Actor', sans-serif;
+}
+.inventory-button {
+  color: transparent;
+  background-color: white;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: solid 2px black;
+  height: 100px;
+  width: 100px;
+}
+.inventory-button:hover,
+.inventory-button:active,
+.inventory-button:focus {
+  color: transparent;
+}
