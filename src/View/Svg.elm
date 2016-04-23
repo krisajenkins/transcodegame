@@ -68,8 +68,6 @@ tile address position cell =
            , y (toString (snd position * tileSize))
            , width (px tileSize)
            , height (px tileSize)
-           , onMouseOut (Signal.message address (Hint Nothing))
-           , onMouseOver (Signal.message address (Hint maybeCommand))
            ]
             ++ colours
             ++ (case maybeCommand of

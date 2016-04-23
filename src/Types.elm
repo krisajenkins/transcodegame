@@ -67,7 +67,6 @@ type Command
 type Action
   = Tick Time
   | PlayerCommand Command
-  | Hint (Maybe Command)
 
 
 type alias Player =
@@ -78,7 +77,6 @@ type alias Model =
   { world : World Cell
   , player : Player
   , dialogue : Maybe String
-  , hint : Maybe String
   , partialCommand : Maybe PartialCommand
   , destination : Maybe Position
   , queuedCommand : Maybe Command

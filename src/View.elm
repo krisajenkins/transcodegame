@@ -51,7 +51,6 @@ root address model =
           ]
         )
     , inventoryView address model.player.inventory
-    , hintView model.hint
     , div
         [ class "alert alert-info" ]
         [ code
@@ -76,18 +75,6 @@ root address model =
             ]
         ]
     ]
-
-
-hintView : Maybe String -> Html
-hintView hint =
-  case hint of
-    Nothing ->
-      span [] []
-
-    Just string ->
-      h3
-        [ class "alert alert-info" ]
-        [ text string ]
 
 
 inventoryView : Address Action -> List Object -> Html

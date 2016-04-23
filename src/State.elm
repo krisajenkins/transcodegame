@@ -88,7 +88,6 @@ initialModel : Model
 initialModel =
   { world = initialWorld
   , dialogue = Just "Well, I guess I'd better look around..."
-  , hint = Nothing
   , partialCommand = Nothing
   , player =
       { position = ( 1, 1 )
@@ -108,16 +107,6 @@ initialEffects =
 updateWithDialogue : Action -> Model -> ( Model, Maybe String )
 updateWithDialogue action model =
   case action of
-    Hint Nothing ->
-      ( { model | hint = Nothing }
-      , Nothing
-      )
-
-    Hint (Just command) ->
-      ( { model | hint = handleHint command model }
-      , Nothing
-      )
-
     PlayerCommand command ->
       handleCommand command model
 

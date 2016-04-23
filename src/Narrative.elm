@@ -171,17 +171,6 @@ handleCommand command model =
       ( model, Just (examine obj) )
 
 
-handleHint : Command -> Model -> Maybe String
-handleHint command model =
-  case command of
-    WalkTo position ->
-      Just
-        ("Walk to " ++ toString position)
-
-    _ ->
-      Nothing
-
-
 nameOf : Object -> String
 nameOf obj =
   case obj of
