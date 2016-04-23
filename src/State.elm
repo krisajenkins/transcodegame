@@ -153,6 +153,7 @@ handleWalk time model =
                       { model
                         | destination = Nothing
                         , timeSinceLastMove = Nothing
+                        , queuedCommand = Nothing
                       }
                   in
                     case model.queuedCommand of

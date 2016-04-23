@@ -109,8 +109,11 @@ handleCommand command model =
     InteractAt position (Thing object) ->
       case model.partialCommand of
         Just PartialPickUp ->
-          { model | partialCommand = Nothing }
-            |> handleWalkThen position (PickUp position object)
+          { model
+            | partialCommand = Nothing
+            , queuedCommand = Just (PickUp position object)
+          }
+            |> handleCommand (WalkTo position)
 
         _ ->
           handleCommand (Interact (Thing object)) model
@@ -126,11 +129,6 @@ handleCommand command model =
 
     Examine obj ->
       ( model, Just (examine obj) )
-
-
-handleWalkThen : Position -> Command -> Model -> ( Model, Maybe String )
-handleWalkThen pos com model =
-  handleCommand (WalkTo pos) { model | queuedCommand = Just com }
 
 
 handleHint : Command -> Model -> Maybe String
