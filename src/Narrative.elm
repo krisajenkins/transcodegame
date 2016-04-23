@@ -192,6 +192,12 @@ examine obj =
 
     WheelbarrowFixed ->
       "This looks like you could use it to transport something heavy."
+    
+    WheelbarrowFull ->
+     "Your precious paperwork, all packaged and ready to roll. Literally."
+
+    ThePlayer ->
+     "Hey, I look great today! Especially for somebody who had way too many Cinzanos last night."
 
     -- TODO To be removed when pattern matching is complete
     --      (or replace with Unknown)
