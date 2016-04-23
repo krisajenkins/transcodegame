@@ -31,6 +31,7 @@ type Object
   | Stamps
   | WheelbarrowBroken
   | WheelbarrowFixed
+  | Unknown
 
 
 type Cell
