@@ -154,7 +154,8 @@ handleCommand command model =
       ( addItem Stamps (addItem UselessVaseEmpty (removeItems [UselessVaseFull] model)), Just (examine UselessVaseFull) )
 
     Examine Fridge ->
-      ( addItem UselessVaseFull (addItem BlackBiro model), Just (examine Fridge) )
+      let newInventory = addItem UselessVaseFull (addItem BlackBiro model)
+      in  ( { newInventory | world = Dict.insert (11,2) (Thing FridgeEmpty) newInventory.world }, Just (examine Fridge) ) 
 
     Examine obj ->
       ( model, Just (examine obj) )
