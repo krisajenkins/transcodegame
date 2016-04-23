@@ -16,8 +16,8 @@ type alias World a =
 type Object
   = BlackBiro
   | BlueBiro
-  | Cinzano
   | Chicken
+  | Cinzano
   | Molotov
   | Package
   | Paperwork

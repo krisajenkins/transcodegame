@@ -40,6 +40,9 @@ handleCommand command model =
     PickUp Cinzano ->
       ( model, Just "Dear lord, I'm not drinking that." )
 
+    Examine obj ->
+      ( model, Just (examine obj) )
+
     _ ->
       ( model, Just "I'm sorry, I can't do that." )
 
@@ -53,3 +56,15 @@ handleHint command model =
 
     _ ->
       Nothing
+
+examine : Object -> String
+examine obj =
+  case obj of
+    Chicken -> "It's a rubber chicken with a pulley in the middle"
+    Cinzano -> "Smells vaguely of petrol.  Why would it ever be half-empty?"
+    Molotov -> "Slightly less lethal than its components"
+    PotatoSackFull -> "Well, you could boil them?  Or mash them?"
+    PotatoSackEmpty -> "I bet those potatoes made a good stew."
+    -- TODO To be removed when pattern matching is complete
+    --      (or replace with Unknown)
+    _ -> "I have no idea what this.  I don't think it knows what it is."
