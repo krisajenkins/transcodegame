@@ -22,6 +22,9 @@ type Cell
 
 type Command
   = WalkTo Position
+  | PickUp Object
+  | Examine Object
+  | Use Object Object
 
 
 type alias Object =
@@ -45,7 +48,7 @@ type alias Model =
   { world : World Cell
   , player : Player
   , dialogue : Maybe String
-  , hint : Maybe Command
+  , hint : Maybe String
   , destination : Maybe Position
   , timeSinceLastMove : Maybe Time
   }

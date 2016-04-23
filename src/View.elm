@@ -52,16 +52,8 @@ root address model =
     ]
 
 
-hintView : Maybe a -> Html
+hintView : Maybe String -> Html
 hintView hint =
   h3
     []
-    [ text
-        (case hint of
-          Nothing ->
-            " "
-
-          Just command ->
-            (toString command)
-        )
-    ]
+    [ text (Maybe.withDefault "" hint) ]

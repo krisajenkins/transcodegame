@@ -1,5 +1,6 @@
 module State (..) where
 
+import Narrative exposing (..)
 import Types exposing (..)
 import Effects exposing (..)
 import Dict
@@ -98,86 +99,89 @@ initialEffects =
 updateWithDialogue : Action -> Model -> ( Model, Maybe String )
 updateWithDialogue action model =
   case action of
-    Hint command ->
-      ( { model | hint = command }
+    Hint Nothing ->
+      ( { model | hint = Nothing }
       , Nothing
       )
 
-    PlayerCommand (WalkTo newDestination) ->
-      if canStandOn (objectAt model.world newDestination) then
-        ( { model | destination = Just newDestination }
-        , Just "Chaaaaarrrrrrge!"
-        )
-      else
-        ( model
-        , Just "Hmmm...that looks like that would hurt."
-        )
+    Hint (Just command) ->
+      ( { model | hint = handleHint command model }
+      , Nothing
+      )
+
+    PlayerCommand command ->
+      handleCommand command model
 
     Tick time ->
-      case model.destination of
-        Nothing ->
-          ( { model | timeSinceLastMove = Nothing }
-          , Nothing
-          )
+      handleWalk time model
 
-        Just destination ->
-          let
-            previousTime =
-              Maybe.withDefault 0 model.timeSinceLastMove
-          in
-            if previousTime + stepTime > time then
-              ( model, Nothing )
-            else
-              case
-                Astar.findPath
-                  estimatedDistance
-                  (validMovesFrom model.world)
-                  (model.player.position)
-                  destination
-              of
+
+handleWalk : Time -> Model -> ( Model, Maybe String )
+handleWalk time model =
+  case model.destination of
+    Nothing ->
+      ( { model | timeSinceLastMove = Nothing }
+      , Nothing
+      )
+
+    Just destination ->
+      let
+        previousTime =
+          Maybe.withDefault 0 model.timeSinceLastMove
+      in
+        if previousTime + stepTime > time then
+          ( model, Nothing )
+        else
+          case
+            Astar.findPath
+              estimatedDistance
+              (validMovesFrom model.world)
+              (model.player.position)
+              destination
+          of
+            Nothing ->
+              ( { model
+                  | destination = Nothing
+                  , timeSinceLastMove = Nothing
+                }
+              , Just "Hmm...I can't find a way there."
+              )
+
+            Just path ->
+              case Array.get 0 path of
                 Nothing ->
                   ( { model
                       | destination = Nothing
                       , timeSinceLastMove = Nothing
                     }
-                  , Just "Hmm...I can't find a way there."
+                  , case objectAt model.world model.player.position of
+                      Nothing ->
+                        Nothing
+
+                      Just Character ->
+                        Just "Hello."
+
+                      Just Path ->
+                        Just "It's nice here."
+
+                      Just Block ->
+                        Just "Help, I'm stuck in a wall!"
+
+                      Just (Thing object) ->
+                        Just ("I can see: " ++ object.name)
                   )
 
-                Just path ->
-                  case Array.get 0 path of
-                    Nothing ->
-                      ( { model
-                          | destination = Nothing
-                          , timeSinceLastMove = Nothing
-                        }
-                      , case objectAt model.world model.player.position of
-                          Nothing ->
-                            Nothing
-
-                          Just Character ->
-                            Just "Hello."
-
-                          Just Path ->
-                            Just "It's nice here."
-
-                          Just Block ->
-                            Just "Help, I'm stuck in a wall!"
-
-                          Just (Thing object) ->
-                            Just ("I can see: " ++ object.name)
-                      )
-
-                    Just p ->
-                      let
-                        player =
-                          model.player
-                      in
-                        ( { model
-                            | player = { player | position = p }
-                            , timeSinceLastMove = Just time
-                          }
-                        , Nothing
-                        )
+                Just p ->
+                  let
+                    player =
+                      model.player
+                  in
+                    ( { model
+                        | player = { player | position = p }
+                        , timeSinceLastMove = Just time
+                      }
+                    , Nothing
+                    )
 
 
 update : Action -> Model -> Model
