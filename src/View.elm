@@ -36,24 +36,34 @@ root address model =
             ]
         ]
         [ text (Maybe.withDefault "" model.dialogue) ]
-    , hintView model.hint
-    , h4
-        []
-        (case model.player.inventory of
-          [] ->
-            [ text "I, I who have nothing." ]
-
-          xs ->
-            List.map (\o -> div [] [ text o.name ]) xs
-        )
     , button
-        []
+        [ class "btn btn-lg btn-info" ]
         [ text "Pick up" ]
+    , inventoryView address model.player.inventory
+    , hintView model.hint
     ]
 
 
 hintView : Maybe String -> Html
 hintView hint =
-  h3
+  case hint of
+    Nothing ->
+      span [] []
+
+    Just string ->
+      h3
+        [ class "alert alert-info" ]
+        [ text string ]
+
+
+inventoryView : Address Action -> List Object -> Html
+inventoryView address inventory =
+  h4
     []
-    [ text (Maybe.withDefault "" hint) ]
+    (case inventory of
+      [] ->
+        [ text "Inventory" ]
+
+      xs ->
+        List.map (\o -> div [] [ text o.name ]) xs
+    )
