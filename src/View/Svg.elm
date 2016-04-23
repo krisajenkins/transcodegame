@@ -38,12 +38,12 @@ tile address position cell =
       case cell of
         Path ->
           ( [ stroke "grey", fill "#fdfdfd" ]
-          , Just (WalkTo position)
+          , Just (InteractAt position Path)
           )
 
         Block ->
           ( [ stroke "#0466da", fill "#04c9da" ]
-          , Just (WalkTo position)
+          , Just (InteractAt position Block)
           )
 
         Thing ThePlayer ->

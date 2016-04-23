@@ -119,10 +119,36 @@ handleCommand command model =
           handleCommand (Interact (Thing object)) model
 
     InteractAt position Block ->
-      ( model, Nothing )
+      (case model.partialCommand of
+        Just PartialPickUp ->
+          ( { model | partialCommand = Nothing }
+          , Just "Yeah, tear down the walls! AnARcHy!!1!"
+          )
+
+        Just PartialExamine ->
+          ( { model | partialCommand = Nothing }
+          , Just "It's a wall."
+          )
+
+        _ ->
+          handleCommand (WalkTo position) model
+      )
 
     InteractAt position Path ->
-      ( model, Nothing )
+      (case model.partialCommand of
+        Just PartialPickUp ->
+          ( { model | partialCommand = Nothing }
+          , Just "DIY was never my strong suit."
+          )
+
+        Just PartialExamine ->
+          ( { model | partialCommand = Nothing }
+          , Just "It's the floor."
+          )
+
+        _ ->
+          handleCommand (WalkTo position) model
+      )
 
     Examine Cinzano ->
       ( model, Just "The party isn't over 'til there only Cinzano left to drink." )
