@@ -53,7 +53,7 @@ tile address position cell =
 
         Thing object ->
           ( [ stroke "black", fill "yellow" ]
-          , Just (PickUp object)
+          , Just (Interact position (Thing object))
           )
   in
     rect
