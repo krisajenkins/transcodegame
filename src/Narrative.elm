@@ -150,8 +150,11 @@ handleCommand command model =
           handleCommand (WalkTo position) model
       )
 
-    Examine Cinzano ->
-      ( model, Just "The party isn't over 'til there only Cinzano left to drink." )
+    Examine UselessVaseFull ->
+      ( addItem Stamps (addItem UselessVaseEmpty (removeItems [UselessVaseFull] model)), Just (examine UselessVaseFull) )
+
+    Examine Fridge ->
+      ( addItem BlackBiro model, Just (examine Fridge) )
 
     Examine obj ->
       ( model, Just (examine obj) )
@@ -371,10 +374,17 @@ handleUse object otherObject model =
           Nothing
 
     ( MolotovLit, Shed ) ->
-      Just
-        ( removeItems [ MolotovLit ] model
-        , Just "You throw the molotov at the shed and watch as it burns to the ground.  You shed hating monster.  The one thing still standing in the wreckage is a broken wheelbarrow."
-        )
+      let newInv = removeItems [ MolotovLit ] model
+          newModel = { newInv | world = Dict.insert (16,5) (Thing WheelbarrowBroken) model.world }
+      in
+        Just
+          ( newModel
+          , Just "You throw the molotov at the shed and watch as it burns to the ground.  You shed hating monster.  The one thing still standing in the wreckage is a broken wheelbarrow."
+          )
+
+    ( WheelbarrowBroken, Chicken ) ->
+      Just (handleCommand (PickUp (16,5) WheelbarrowFixed)
+                          (removeItems [ Chicken ] model))
 
     ( Still, PotatoSackFull ) ->
       Just
