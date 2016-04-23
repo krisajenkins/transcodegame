@@ -154,7 +154,7 @@ handleCommand command model =
       ( addItem Stamps (addItem UselessVaseEmpty (removeItems [UselessVaseFull] model)), Just (examine UselessVaseFull) )
 
     Examine Fridge ->
-      ( addItem BlackBiro model, Just (examine Fridge) )
+      ( addItem UselessVaseFull (addItem BlackBiro model), Just (examine Fridge) )
 
     Examine obj ->
       ( model, Just (examine obj) )
@@ -343,7 +343,7 @@ handleUse object otherObject model =
 
     ( BlackBiro, Paperwork ) ->
       Just
-        ( combineItems BlackBiro Paperwork PaperworkDone model
+        ( removeItems [ BlackBiro, Paperwork ] { model | world = Dict.insert (7,7) (Thing PaperworkDone) model.world }
         , Just "The black biro allows you to fill out the stack of paperwork after a while.  A very, very long while."
         )
 
@@ -388,13 +388,13 @@ handleUse object otherObject model =
 
     ( Still, PotatoSackFull ) ->
       Just
-        ( removeItems [ PotatoSackFull ] model
+        ( addItem PotatoSackEmpty (removeItems [ PotatoSackFull ] model)
         , Just "You empty the potatoes into the still and find yourself with an empty potato sack."
         )
 
     ( PotatoSackEmpty, PaperworkDone ) ->
       Just
-        ( combineItems PotatoSackEmpty PaperworkDone Package model
+        ( removeItems [ PotatoSackEmpty ] { model | world = Dict.insert (7,7) (Thing Package) model.world } 
         , Just "Sticking the paperwork into the potato sack makes what could just about pass as a package.  Good job!"
         )
 
