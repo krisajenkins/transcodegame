@@ -34,44 +34,74 @@ root address model =
 tile : Address Action -> Position -> Cell -> Svg
 tile address position cell =
   let
-    ( colours, maybeCommand ) =
+    ( preamble, colours, maybeCommand ) =
       case cell of
         Path ->
-          ( [ stroke "grey", fill "#fdfdfd" ]
+          ( defs [] []
+          , [ stroke "grey", fill "#fdfdfd" ]
           , Just (InteractAt position Path)
           )
 
         Block ->
-          ( [ stroke "#0466da", fill "#04c9da" ]
+          ( defs [] []
+          , [ stroke "#0466da", fill "#04c9da" ]
           , Just (InteractAt position Block)
           )
 
         Thing ThePlayer ->
-          ( [ stroke "#8504da", fill "#e4049a" ]
+          ( (patternDefs (toString ThePlayer))
+          , [ stroke "#8504da", fill "url(#ThePlayer)" ]
           , Just (InteractAt position (Thing ThePlayer))
           )
 
         Thing object ->
-          ( [ stroke "black", fill "yellow" ]
+          ( (patternDefs (toString object))
+          , [ stroke "black", fill ("url(#" ++ toString object ++ ")") ]
           , Just (InteractAt position (Thing object))
           )
   in
-    rect
-      ([ x (toString (fst position * tileSize))
-       , y (toString (snd position * tileSize))
-       , width (px tileSize)
-       , height (px tileSize)
-       , onMouseOut (Signal.message address (Hint Nothing))
-       , onMouseOver (Signal.message address (Hint maybeCommand))
-       ]
-        ++ colours
-        ++ (case maybeCommand of
-              Nothing ->
-                []
-
-              Just command ->
-                [ onClick (Signal.message address (PlayerCommand command))
-                ]
-           )
-      )
+    g
       []
+      [ preamble
+      , rect
+          ([ x (toString (fst position * tileSize))
+           , y (toString (snd position * tileSize))
+           , width (px tileSize)
+           , height (px tileSize)
+           , onMouseOut (Signal.message address (Hint Nothing))
+           , onMouseOver (Signal.message address (Hint maybeCommand))
+           ]
+            ++ colours
+            ++ (case maybeCommand of
+                  Nothing ->
+                    []
+
+                  Just command ->
+                    [ onClick (Signal.message address (PlayerCommand command))
+                    ]
+               )
+          )
+          []
+      ]
+
+
+patternDefs : String -> Svg
+patternDefs objectName =
+  defs
+    []
+    [ pattern
+        [ id objectName
+        , patternUnits "userSpaceOnUse"
+        , width (px tileSize)
+        , height (px tileSize)
+        ]
+        [ image
+            [ xlinkHref ("images/" ++ objectName ++ ".png")
+            , x (px 0)
+            , y (px 0)
+            , width (px tileSize)
+            , height (px tileSize)
+            ]
+            []
+        ]
+    ]

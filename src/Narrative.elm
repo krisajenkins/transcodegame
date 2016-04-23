@@ -66,7 +66,7 @@ handleCommand command model =
               , player = { player | inventory = thing :: player.inventory }
             }
         in
-          ( newModel, Just "I've got it." )
+          ( newModel, Just ("I've got: " ++ nameOf thing) )
       else
         ( model, Just "I can't pick that up." )
 
