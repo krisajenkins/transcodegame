@@ -172,7 +172,8 @@ handleWalk time model =
                         ( newModel, Just "J'arrive!" )
 
                       Just command ->
-                        handleCommand command newModel
+                        { newModel | queuedCommand = Nothing }
+                          |> handleCommand command
 
                 Just p ->
                   let
