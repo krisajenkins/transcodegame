@@ -36,13 +36,22 @@ root address model =
             ]
         ]
         [ text (Maybe.withDefault "" model.dialogue) ]
-    , button
-        [ class "btn btn-lg btn-info"
-        , onClick address (PlayerCommand (PartialCommand PartialPickUp))
+    , div
+        [ class "btn-group" ]
+        [ button
+            [ class "btn btn-lg btn-info"
+            , onClick address (PlayerCommand (PartialCommand PartialPickUp))
+            ]
+            [ text "Pick up" ]
+        , button
+            [ class "btn btn-lg btn-info"
+            , onClick address (PlayerCommand (PartialCommand PartialUse))
+            ]
+            [ text "Use" ]
         ]
-        [ text "Pick up" ]
     , inventoryView address model.player.inventory
     , hintView model.hint
+    , div [ class "alert alert-danger" ] [ code [] [ text (toString model.partialCommand) ] ]
     ]
 
 
@@ -60,18 +69,19 @@ hintView hint =
 
 inventoryView : Address Action -> List Object -> Html
 inventoryView address inventory =
-  h4
+  div
     []
-    (case inventory of
-      [] ->
+    [ h4
+        []
         [ text "Inventory" ]
+    , div [] (List.map (inventoryObjectView address) inventory)
+    ]
 
-      xs ->
-        List.map
-          (\object ->
-            div
-              []
-              [ text (toString object) ]
-          )
-          xs
-    )
+
+inventoryObjectView : Address Action -> Object -> Html
+inventoryObjectView address object =
+  button
+    [ class "btn btn.info"
+    , onClick address (PlayerCommand (Examine object))
+    ]
+    [ text (toString object) ]

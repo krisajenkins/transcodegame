@@ -1,6 +1,7 @@
 module Narrative (..) where
 
 import Types exposing (..)
+import Dict
 
 
 handleCommand : Command -> Model -> ( Model, Maybe String )
@@ -37,8 +38,43 @@ handleCommand command model =
           )
       )
 
-    PickUp Cinzano ->
-      ( model, Just "Dear lord, I'm not drinking that." )
+    PickUp position Cinzano ->
+      let
+        player =
+          model.player
+
+        newModel =
+          { model
+            | world = Dict.insert position Path model.world
+            , player = { player | inventory = Cinzano :: player.inventory }
+          }
+      in
+        ( newModel, Just "Just don't make me drink it." )
+
+    Examine Cinzano ->
+      ( model, Just "The party isn't over 'til there only Cinzano left to drink." )
+
+    Interact position (Thing object) ->
+      case model.partialCommand of
+        Just PartialPickUp ->
+          handleCommand (PickUp position object) model
+
+        Just PartialUse ->
+          ( { model | partialCommand = Just (PartialUseOne object) }
+          , Just "What shall I use it with?"
+          )
+
+        Just (PartialUseOne otherObject) ->
+          if object == otherObject then
+            ( model, Just "I can't use something with itself." )
+          else
+            handleCommand (Use object otherObject) model
+
+        Just PartialExamine ->
+          handleCommand (Examine object) model
+
+        Nothing ->
+          handleCommand (Examine object) model
 
     Examine obj ->
       ( model, Just (examine obj) )

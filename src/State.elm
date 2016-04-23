@@ -95,7 +95,7 @@ initialEffects =
 
 updateWithDialogue : Action -> Model -> ( Model, Maybe String )
 updateWithDialogue action model =
-  case Debug.log "ACTION" action of
+  case action of
     Hint Nothing ->
       ( { model | hint = Nothing }
       , Nothing

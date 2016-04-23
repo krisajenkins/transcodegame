@@ -50,9 +50,10 @@ type PartialCommand
 
 type Command
   = WalkTo Position
-  | PickUp Object
+  | PickUp Position Object
   | Examine Object
   | Use Object Object
+  | Interact Position Cell
   | PartialCommand PartialCommand
 
 
