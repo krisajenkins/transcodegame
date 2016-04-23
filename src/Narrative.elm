@@ -408,15 +408,13 @@ handleUse object otherObject model =
 
     ( Stamps, Package ) ->
       Just
-        ( combineItems Stamps Package Parcel model
+        ( removeItems [ Stamps ] { model | world = Dict.insert (7,7) (Thing Parcel) model.world }
         , Just "It takes a lot of licking, but you cover the parcel in stamps eventually.  Might need a drinks break before you do anything else though."
         )
 
     ( Parcel, WheelbarrowFixed ) ->
-      Just
-        ( combineItems Parcel WheelbarrowFixed WheelbarrowFull model
-        , Just "You pick up the parcel and place it into the wheelbarrow.  Then you place the wheelbarrow into your pocket, not for one minute questioning the laws of logic and physics in this universe."
-        )
+      let ( newModel, _ ) = handleCommand (PickUp (7,7) WheelbarrowFull) model
+      in  Just ( newModel, Just "You pick up the parcel and place it into the wheelbarrow.  Then you place the wheelbarrow into your pocket, not for one minute questioning the laws of logic and physics in this universe.")
 
     ( WheelbarrowFull, Postbox ) ->
       Just
