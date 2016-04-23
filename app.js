@@ -11518,7 +11518,11 @@ Elm.Types.make = function (_elm) {
       {case "BlackBiro": return true;
          case "Chicken": return true;
          case "Cinzano": return true;
+         case "Fridge": return false;
+         case "FridgeEmpty": return false;
+         case "Lighter": return true;
          case "Molotov": return true;
+         case "MolotovLit": return false;
          case "Package": return false;
          case "Paperwork": return false;
          case "PaperworkDone": return false;
@@ -11529,16 +11533,12 @@ Elm.Types.make = function (_elm) {
          case "Rag": return true;
          case "Shed": return false;
          case "Stamps": return true;
+         case "Still": return false;
          case "UselessVaseEmpty": return true;
          case "UselessVaseFull": return true;
          case "WheelbarrowBroken": return false;
          case "WheelbarrowFixed": return true;
          case "WheelbarrowFull": return true;
-         case "Fridge": return false;
-         case "FridgeEmpty": return false;
-         case "Lighter": return true;
-         case "MolotovLit": return true;
-         case "Still": return false;
          default: return false;}
    };
    var movesFrom = function (_p1) {
@@ -11684,16 +11684,72 @@ Elm.Narrative.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm),
    $Types = Elm.Types.make(_elm);
    var _op = {};
+   var removeItems = F2(function (items,model) {
+      var player = model.player;
+      var newInventory = A2($List.filter,A2($Basics.flip,$List.member,items),model.player.inventory);
+      var newPlayer = _U.update(player,{inventory: newInventory});
+      return _U.update(model,{player: newPlayer});
+   });
+   var addItem = F2(function (item,model) {
+      var player = model.player;
+      var newInventory = A2($List._op["::"],item,model.player.inventory);
+      var newPlayer = _U.update(player,{inventory: newInventory});
+      return _U.update(model,{player: newPlayer});
+   });
+   var combineItems = F4(function (obj1,obj2,result,model) {    return A2(addItem,result,A2(removeItems,_U.list([obj1,obj2]),model));});
    var handleUse = F3(function (object,otherObject,model) {
       var _p0 = {ctor: "_Tuple2",_0: object,_1: otherObject};
-      _v0_2: do {
-         if (_p0.ctor === "_Tuple2" && _p0._1.ctor === "ThePlayer") {
+      _v0_9: do {
+         if (_p0.ctor === "_Tuple2") {
                switch (_p0._0.ctor)
-               {case "ThePlayer": return $Maybe.Just({ctor: "_Tuple2",_0: model,_1: $Maybe.Just("You want me to use myself? Naughty.")});
-                  case "Cinzano": return $Maybe.Just({ctor: "_Tuple2",_0: model,_1: $Maybe.Just("There. Is. No. Way. I. Will. Drink. Cinzano.")});
-                  default: break _v0_2;}
+               {case "ThePlayer": if (_p0._1.ctor === "ThePlayer") {
+                          return $Maybe.Just({ctor: "_Tuple2",_0: model,_1: $Maybe.Just("You want me to use myself? Naughty.")});
+                       } else {
+                          break _v0_9;
+                       }
+                  case "BlackBiro": if (_p0._1.ctor === "Paperwork") {
+                          return $Maybe.Just({ctor: "_Tuple2"
+                                             ,_0: A4(combineItems,$Types.BlackBiro,$Types.Paperwork,$Types.PaperworkDone,model)
+                                             ,_1: $Maybe.Just("The black biro allows you to fill out the stack of paperwork after a while.  A very, very long while.")});
+                       } else {
+                          break _v0_9;
+                       }
+                  case "Rag": if (_p0._1.ctor === "Cinzano") {
+                          return $Maybe.Just({ctor: "_Tuple2"
+                                             ,_0: A4(combineItems,$Types.Rag,$Types.Cinzano,$Types.Molotov,model)
+                                             ,_1: $Maybe.Just("You turn the half empty bottle into what looks like a crude molotov cocktail.  This is probably a better use for a half empty bottle of Cinzano.")});
+                       } else {
+                          break _v0_9;
+                       }
+                  case "Lighter": switch (_p0._1.ctor)
+                    {case "Shed": return $Maybe.Just({ctor: "_Tuple2"
+                                                     ,_0: model
+                                                     ,_1: $Maybe.Just("The wood may look flammable, but it\'ll take more than the lighter to set it on fire.")});
+                       case "Paperwork": return $Maybe.Just({ctor: "_Tuple2"
+                                                            ,_0: model
+                                                            ,_1: $Maybe.Just("This is not the correct way to get out your anger at bureaucracy.")});
+                       case "PaperworkDone": return $Maybe.Just({ctor: "_Tuple2"
+                                                                ,_0: model
+                                                                ,_1: $Maybe.Just("This is not the correct way to get out your anger at bureaucracy.")});
+                       case "Molotov": return $Maybe.Just({ctor: "_Tuple2"
+                                                          ,_0: A4(combineItems,$Types.Lighter,$Types.Molotov,$Types.MolotovLit,model)
+                                                          ,_1: $Maybe.Just("Now it looks even more dangerous.")});
+                       default: break _v0_9;}
+                  case "MolotovLit": if (_p0._1.ctor === "Shed") {
+                          return $Maybe.Just({ctor: "_Tuple2"
+                                             ,_0: A2(removeItems,_U.list([$Types.MolotovLit]),model)
+                                             ,_1: $Maybe.Just("You throw the molotov at the shed and watch as it burns to the ground.  You shed hating monster.  The one thing still standing in the wreckage is a broken wheelbarrow.")});
+                       } else {
+                          break _v0_9;
+                       }
+                  case "Cinzano": if (_p0._1.ctor === "ThePlayer") {
+                          return $Maybe.Just({ctor: "_Tuple2",_0: model,_1: $Maybe.Just("There. Is. No. Way. I. Will. Drink. Cinzano.")});
+                       } else {
+                          break _v0_9;
+                       }
+                  default: break _v0_9;}
             } else {
-               break _v0_2;
+               break _v0_9;
             }
       } while (false);
       return $Maybe.Nothing;
@@ -11881,7 +11937,15 @@ Elm.Narrative.make = function (_elm) {
                  }}
       }
    });
-   return _elm.Narrative.values = {_op: _op,handleCommand: handleCommand,handleHint: handleHint,nameOf: nameOf,examine: examine,handleUse: handleUse};
+   return _elm.Narrative.values = {_op: _op
+                                  ,handleCommand: handleCommand
+                                  ,handleHint: handleHint
+                                  ,nameOf: nameOf
+                                  ,examine: examine
+                                  ,handleUse: handleUse
+                                  ,combineItems: combineItems
+                                  ,addItem: addItem
+                                  ,removeItems: removeItems};
 };
 Elm.Astar = Elm.Astar || {};
 Elm.Astar.make = function (_elm) {
