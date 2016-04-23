@@ -263,6 +263,12 @@ handleUse object otherObject model =
     ( ThePlayer, ThePlayer ) ->
       Just ( model, Just "You want me to use myself? Naughty." )
 
+    ( UselessVaseFull, _ ) ->
+      Just ( model, Just "What part of the word 'useless' do you not understand?" )
+
+    ( UselessVaseEmpty, _ ) ->
+      Just ( model, Just "What part of the word 'useless' do you not understand?" )
+
     ( BlackBiro, Paperwork ) ->
       Just ( combineItems BlackBiro Paperwork PaperworkDone model
            , Just "The black biro allows you to fill out the stack of paperwork after a while.  A very, very long while." )
@@ -287,6 +293,29 @@ handleUse object otherObject model =
     ( MolotovLit, Shed ) ->
       Just ( removeItems [MolotovLit] model
            , Just "You throw the molotov at the shed and watch as it burns to the ground.  You shed hating monster.  The one thing still standing in the wreckage is a broken wheelbarrow." )
+
+    ( Still, PotatoSackFull ) ->
+      Just ( removeItems [PotatoSackFull] model
+           , Just "You empty the potatoes into the still and find yourself with an empty potato sack." )
+
+    ( PotatoSackEmpty, PaperworkDone ) ->
+      Just ( combineItems PotatoSackEmpty PaperworkDone Package model
+           , Just "Sticking the paperwork into the potato sack makes what could just about pass as a package.  Good job!" )
+
+    ( Stamps, Package ) ->
+      Just ( combineItems Stamps Package Parcel model
+           , Just "It takes a lot of licking, but you cover the parcel in stamps eventually.  Might need a drinks break before you do anything else though." )
+
+    ( Parcel, WheelbarrowFixed ) ->
+      Just ( combineItems Parcel WheelbarrowFixed WheelbarrowFull model
+           , Just "You pick up the parcel and place it into the wheelbarrow.  Then you place the wheelbarrow into your pocket, not for one minute questioning the laws of logic and physics in this universe." )
+
+    ( WheelbarrowFull, Postbox ) ->
+      Just ( addItem WheelbarrowFixed (removeItems [WheelbarrowFull] model)
+           , Just "Emptying the contents of the wheelbarrow into the postbox, you give a sigh of relief.  Now all that there's left to do is to wait for it to be processed, and pray that bureaucracy will be merciful on you." )
+
+    ( Lighter, PotatoSackFull ) ->
+      Just ( model, Just "You might be able to make roast potatoes this way, but it'll take a really long time." )
 
     ( Cinzano, ThePlayer ) ->
       Just ( model, Just "There. Is. No. Way. I. Will. Drink. Cinzano." )
