@@ -160,8 +160,7 @@ handleCommand command model =
     Examine Fridge ->
       let
         newInventory =
-          model
-            |> addItems [ BlackBiro, UselessVaseFull ]
+          addItems [ BlackBiro, UselessVaseFull ] model
       in
         ( { newInventory | world = Dict.insert ( 11, 2 ) (Thing FridgeEmpty) newInventory.world }
         , Just (examine Fridge)

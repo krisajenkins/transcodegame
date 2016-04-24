@@ -41,6 +41,12 @@ type Object
   | ThePlayer
 
 
+type Location
+  = InWorld Position
+  | Inventory
+  | None
+
+
 type Cell
   = Block
   | Path
@@ -70,12 +76,13 @@ type Action
 
 
 type alias Player =
-  { position : Position, inventory : List Object }
+  { position : Position }
 
 
 type alias Model =
   { world : World Cell
   , player : Player
+  , objects : List ( Object, Location )
   , dialogue : Maybe String
   , partialCommand : Maybe PartialCommand
   , destination : Maybe Position
@@ -211,19 +218,30 @@ canPickUp object =
       False
 
 
-addItems : List Object -> Model -> Model
-addItems items model =
-  let
-    player =
-      model.player
-  in
-    { model
-      | player =
-          { player
-            | inventory =
-                items ++ model.player.inventory
-          }
-    }
+moveObject : Object -> Location -> Model -> Model
+moveObject object location model =
+  { model
+    | objects =
+        List.map
+          (\( o, l ) ->
+            if o == object then
+              ( object, location )
+            else
+              ( object, l )
+          )
+          model.object
+  }
+
+
+acquireObjects : List Object -> Model -> Model
+acquireObjects newObjects model =
+  { model
+    | objects =
+        List.map
+          (\o -> ( o, Inventory ))
+          newObjects
+          ++ model.objects
+  }
 
 
 removeItems : List Object -> Model -> Model
