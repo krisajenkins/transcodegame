@@ -115,6 +115,13 @@ handleCommand command model =
           }
             |> handleCommand (WalkTo position)
 
+        Just (PartialUseOne otherObject) ->
+          { model
+            | partialCommand = Nothing
+            , queuedCommand = Just (Use object otherObject)
+          }
+            |> handleCommand (WalkTo position)
+
         _ ->
           handleCommand (Interact (Thing object)) model
 
