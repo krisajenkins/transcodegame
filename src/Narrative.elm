@@ -51,9 +51,6 @@ handleCommand command model =
           )
       )
 
-    PickUp position ThePlayer ->
-      ( model, Just "That was a real pick-me-up!" )
-
     PickUp position thing ->
       if canPickUp thing then
         let
@@ -68,7 +65,7 @@ handleCommand command model =
         in
           ( newModel, Just ("I've got: " ++ nameOf thing) )
       else
-        ( model, Just "I can't pick that up." )
+        ( model, Just (pickUpFail thing) )
 
     Interact Path ->
       ( model, Nothing )
@@ -440,3 +437,20 @@ handleUse object otherObject model =
 
     _ ->
       Nothing
+
+pickUpFail : Object -> String
+pickUpFail object =
+  case object of
+    ThePlayer -> "That was a real pick-me-up!"
+    -- TODO review or rewrite temporary "can't pick this up" messages
+    Fridge -> "I'd love to bring a fridge full of food with me, but that's not really possible."
+    FridgeEmpty -> "There's not even any food in this.  I can't be bothered to take it with me."
+    Paperwork -> "That must weigh a tonne!  Besides, I need to fill the forms out first..."
+    PaperworkDone -> "I should package this ready to send before I try to move this."
+    Package -> "I should put stamps on this first."
+    Postbox -> "I could try, but then how would I send the forms?"
+    Shed -> "It's a shed.  That won't fit in my pocket."
+    Still -> "The still remains very still no matter how much I try to move it."
+    WheelbarrowBroken -> "It's missing a wheel; I can't move that."
+
+    _ -> "I can't pick that up."
