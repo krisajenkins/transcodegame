@@ -421,7 +421,11 @@ handleUse object otherObject model =
         ( newModel, _ ) =
           handleCommand (PickUp ( 7, 7 ) WheelbarrowFull) model
       in
-        Just ( newModel, Just "You pick up the parcel and place it into the wheelbarrow.  Then you place the wheelbarrow into your pocket, not for one minute questioning the laws of logic and physics in this universe." )
+        Just ( { model | world = Dict.insert ( 7, 7 ) Path model.world }
+                 |> addItems [ WheelbarrowFull ]
+                 |> removeItems [ WheelbarrowFixed ]
+             , Just "You pick up the parcel and place it into the wheelbarrow.  Then you place the wheelbarrow into your pocket, not for one minute questioning the laws of logic and physics in this universe."
+             )
 
     ( WheelbarrowFull, Postbox ) ->
       Just
