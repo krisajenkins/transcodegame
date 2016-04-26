@@ -60,16 +60,6 @@ reconstructPath cameFrom goal =
         (reconstructPath cameFrom next)
 
 
-bestCost : Int -> Maybe Int -> Int
-bestCost newDistance oldDistance =
-  case oldDistance of
-    Nothing ->
-      newDistance
-
-    Just distance ->
-      min distance newDistance
-
-
 updateCost : Position -> Position -> Model -> Model
 updateCost current neighbour model =
   let
