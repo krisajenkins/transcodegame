@@ -155,6 +155,9 @@ handleCommand command model =
     Examine obj ->
       ( model, Just (examine obj) )
 
+    WalkFail ->
+      ( model, Just "Hmm...I can't find a way there." )
+
 
 nameOf : Object -> String
 nameOf obj =

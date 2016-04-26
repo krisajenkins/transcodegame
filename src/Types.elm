@@ -62,6 +62,7 @@ type Command
   | Interact Cell
   | InteractAt Position Cell
   | PartialCommand PartialCommand
+  | WalkFail
 
 
 type Action

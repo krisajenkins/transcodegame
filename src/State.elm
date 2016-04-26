@@ -65,6 +65,7 @@ initialWorld =
       , verticalWall 12 [1..3]
       , horizontalWall [5..8] 6
       , verticalWall 5 [6..9]
+      , [ ( ( 9, 6 ), Block ) ] -- TODO REMOVE: TEMPORARY FOR TESTING
       , horizontalWall [10..12] 6
       , verticalWall 12 [5..9]
       , [ ( ( 8, 1 ), Block ) ]
@@ -138,12 +139,14 @@ handleWalk time model =
               destination
           of
             Astar.Failure otherPosition ->
-              ( { model
-                  | destination = Nothing
-                  , timeSinceLastMove = Nothing
-                }
-              , Just ("Hmm...I can't find a way there.  " ++ toString otherPosition ++ " is nearby though.")
-              )
+              let
+                newModel =
+                  if estimatedDistance destination otherPosition > 1 then
+                    { model | queuedCommand = Just WalkFail }
+                  else
+                    model
+              in
+                handleWalk time { newModel | destination = Just otherPosition }
 
             Astar.Success path ->
               case Array.get 0 path of
