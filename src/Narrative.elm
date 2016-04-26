@@ -1,8 +1,7 @@
 module Narrative (..) where
 
-import Set exposing (Set)
-import Types exposing (..)
 import Dict
+import Types exposing (..)
 
 
 handleCommand : Command -> Model -> ( Model, Maybe String )
