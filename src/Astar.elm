@@ -1,4 +1,4 @@
-module Astar (findPath, Position, Path) where
+module Astar (findPath, AstarResult(..), Position, Path) where
 
 import Set exposing (Set)
 import Dict exposing (Dict)
@@ -14,16 +14,21 @@ type alias Path =
 
 
 type alias Model =
-  { evaluated : Set Position
+  { start : Position
+  , evaluated : Set Position
   , openSet : Set Position
   , costs : Dict Position Int
   , cameFrom : Dict Position Position
   }
 
+-- The result of the modified A* algorithm: either a shortest path to
+-- the goal position, or the nearest reachable position to the goal
+type AstarResult = Success Path | Failure Position
 
 initialModel : Position -> Model
 initialModel start =
-  { evaluated = Set.empty
+  { start = start
+  , evaluated = Set.empty
   , openSet = Set.singleton start
   , costs = Dict.singleton start 0
   , cameFrom = Dict.empty
@@ -95,16 +100,39 @@ updateCost current neighbour model =
         else
           model
 
+guessClosestNeighbour : (Position -> Int) -> Model -> Position
+guessClosestNeighbour costFn model =
+  let
+    tagWithCosts p =
+      case Dict.get p model.costs of
+        Nothing -> Nothing
+        Just c -> Just ( p, costFn p, c )
 
-astar : (Position -> Position -> Int) -> (Position -> Set Position) -> Position -> Model -> Maybe Path
+    projectCosts pos =
+      case pos of
+        ( _, estimated, actual ) -> ( estimated, actual )
+
+    fst3 tup =
+      case tup of
+        ( a, _, _ ) -> a
+  in
+    model.evaluated
+      |> Set.toList
+      |> List.filterMap tagWithCosts
+      |> List.sortBy projectCosts
+      |> List.head
+      |> Maybe.map fst3
+      |> Maybe.withDefault model.start
+
+astar : (Position -> Position -> Int) -> (Position -> Set Position) -> Position -> Model -> AstarResult
 astar costFn moveFn goal model =
   case cheapestOpen (costFn goal) model of
     Nothing ->
-      Nothing
+      Failure (guessClosestNeighbour (costFn goal) model)
 
     Just current ->
       if current == goal then
-        Just (reconstructPath model.cameFrom goal)
+        Success (reconstructPath model.cameFrom goal)
       else
         let
           modelPopped =
@@ -132,7 +160,6 @@ astar costFn moveFn goal model =
         in
           astar costFn moveFn goal modelWithCosts
 
-
 {-| Find a path between `start` and `end`. You must supply a cost function and a move function.
 
   The cost function must estimate the distance between any two
@@ -146,7 +173,7 @@ astar costFn moveFn goal model =
   points. Otherwise it returns `Just` an `Array` of steps from `start`
   to `end`.
 -}
-findPath : (Position -> Position -> Int) -> (Position -> Set Position) -> Position -> Position -> Maybe Path
+findPath : (Position -> Position -> Int) -> (Position -> Set Position) -> Position -> Position -> AstarResult
 findPath costFn moveFn start end =
   initialModel start
     |> astar costFn moveFn end

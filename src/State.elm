@@ -137,15 +137,15 @@ handleWalk time model =
               (model.player.position)
               destination
           of
-            Nothing ->
+            Astar.Failure otherPosition ->
               ( { model
                   | destination = Nothing
                   , timeSinceLastMove = Nothing
                 }
-              , Just "Hmm...I can't find a way there."
+              , Just ("Hmm...I can't find a way there.  " ++ toString otherPosition ++ " is nearby though.")
               )
 
-            Just path ->
+            Astar.Success path ->
               case Array.get 0 path of
                 Nothing ->
                   let

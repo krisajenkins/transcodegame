@@ -10,26 +10,12 @@ handleCommand command model =
   case command of
     WalkTo newDestination ->
       if newDestination /= model.player.position then
-        if canStandOn (objectAt model.world newDestination) then
-          ( { model
-              | destination = Just newDestination
-              , partialCommand = Nothing
-            }
-          , Just "Chaaaaarrrrrrge!"
-          )
-        else
-          let
-            neighbours =
-              validMovesFrom model.world newDestination
-          in
-            case List.head (Set.toList neighbours) of
-              Nothing ->
-                ( model
-                , Just "Hmmm...that looks like that would hurt."
-                )
-
-              Just pos ->
-                handleCommand (WalkTo pos) model
+        ( { model
+            | destination = Just newDestination
+            , partialCommand = Nothing
+          }
+        , Just "Chaaaaarrrrrrge!"
+        )
       else
         ( model, Just "I'm already there." )
 
