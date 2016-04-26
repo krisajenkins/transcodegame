@@ -16,7 +16,7 @@ type alias Path =
 type alias Model =
   { evaluated : Set Position
   , openSet : Set Position
-  , costs : Dict Position Int
+  , costs : Dict Position Float
   , cameFrom : Dict Position Position
   }
 
@@ -30,7 +30,7 @@ initialModel start =
   }
 
 
-cheapestOpen : (Position -> Int) -> Model -> Maybe Position
+cheapestOpen : (Position -> Float) -> Model -> Maybe Position
 cheapestOpen costFn model =
   model.openSet
     |> Set.toList
@@ -67,7 +67,9 @@ updateCost current neighbour model =
       Dict.insert neighbour current model.cameFrom
 
     distanceTo =
-      Array.length (reconstructPath newCameFrom neighbour)
+      reconstructPath newCameFrom neighbour
+        |> Array.length
+        |> toFloat
 
     newModel =
       { model
@@ -86,7 +88,7 @@ updateCost current neighbour model =
           model
 
 
-astar : (Position -> Position -> Int) -> (Position -> Set Position) -> Position -> Model -> Maybe Path
+astar : (Position -> Position -> Float) -> (Position -> Set Position) -> Position -> Model -> Maybe Path
 astar costFn moveFn goal model =
   case cheapestOpen (costFn goal) model of
     Nothing ->
@@ -136,7 +138,7 @@ astar costFn moveFn goal model =
   points. Otherwise it returns `Just` an `Array` of steps from `start`
   to `end`.
 -}
-findPath : (Position -> Position -> Int) -> (Position -> Set Position) -> Position -> Position -> Maybe Path
+findPath : (Position -> Position -> Float) -> (Position -> Set Position) -> Position -> Position -> Maybe Path
 findPath costFn moveFn start end =
   initialModel start
     |> astar costFn moveFn end
