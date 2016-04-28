@@ -111,7 +111,7 @@ estimatedDistance ( x1, y1 ) ( x2, y2 ) =
     dx = toFloat <| abs (x1 - x2)
     dy = toFloat <| abs (y1 - y2)
   in
-    abs <| (sqrt 2 * min dx dy) - abs (dy - dx)
+    abs <| (sqrt 2 * min dx dy) + abs (dy - dx)
 
 
 movesFrom : Position -> Set Position
