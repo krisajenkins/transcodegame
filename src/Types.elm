@@ -106,10 +106,13 @@ objectAt =
   flip Dict.get
 
 
-estimatedDistance : Position -> Position -> Int
+estimatedDistance : Position -> Position -> Float
 estimatedDistance ( x1, y1 ) ( x2, y2 ) =
-  (abs (x1 - x2))
-    + (abs (y1 - y2))
+  let
+    dx = toFloat <| abs (x1 - x2)
+    dy = toFloat <| abs (y1 - y2)
+  in
+    abs <| (sqrt 2 * min dx dy) + abs (dy - dx)
 
 
 movesFrom : Position -> Set Position
@@ -122,7 +125,7 @@ movesFrom ( x, y ) =
     , ( x - 1, y + 1 )
     , ( x - 1, y - 1 )
     , ( x + 1, y - 1 )
-    , ( x - 1, y - 1 )
+    , ( x + 1, y + 1 )
     ]
 
 

@@ -17,7 +17,7 @@ type alias Model =
   { start : Position
   , evaluated : Set Position
   , openSet : Set Position
-  , costs : Dict Position Int
+  , costs : Dict Position Float
   , cameFrom : Dict Position Position
   }
 
@@ -35,7 +35,7 @@ initialModel start =
   }
 
 
-cheapestOpen : (Position -> Int) -> Model -> Maybe Position
+cheapestOpen : (Position -> Float) -> Model -> Maybe Position
 cheapestOpen costFn model =
   model.openSet
     |> Set.toList
@@ -65,16 +65,6 @@ reconstructPath cameFrom goal =
         (reconstructPath cameFrom next)
 
 
-bestCost : Int -> Maybe Int -> Int
-bestCost newDistance oldDistance =
-  case oldDistance of
-    Nothing ->
-      newDistance
-
-    Just distance ->
-      min distance newDistance
-
-
 updateCost : Position -> Position -> Model -> Model
 updateCost current neighbour model =
   let
@@ -82,7 +72,9 @@ updateCost current neighbour model =
       Dict.insert neighbour current model.cameFrom
 
     distanceTo =
-      Array.length (reconstructPath newCameFrom neighbour)
+      reconstructPath newCameFrom neighbour
+        |> Array.length
+        |> toFloat
 
     newModel =
       { model
