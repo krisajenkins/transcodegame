@@ -92,7 +92,7 @@ updateCost current neighbour model =
         else
           model
 
-guessClosestNeighbour : (Position -> Int) -> Model -> Position
+guessClosestNeighbour : (Position -> Float) -> Model -> Position
 guessClosestNeighbour costFn model =
   let
     tagWithCosts p =
@@ -116,7 +116,7 @@ guessClosestNeighbour costFn model =
       |> Maybe.map fst3
       |> Maybe.withDefault model.start
 
-astar : (Position -> Position -> Int) -> (Position -> Set Position) -> Position -> Model -> AstarResult
+astar : (Position -> Position -> Float) -> (Position -> Set Position) -> Position -> Model -> AstarResult
 astar costFn moveFn goal model =
   case cheapestOpen (costFn goal) model of
     Nothing ->
@@ -165,7 +165,7 @@ astar costFn moveFn goal model =
   points. Otherwise it returns `Just` an `Array` of steps from `start`
   to `end`.
 -}
-findPath : (Position -> Position -> Int) -> (Position -> Set Position) -> Position -> Position -> AstarResult
+findPath : (Position -> Position -> Float) -> (Position -> Set Position) -> Position -> Position -> AstarResult
 findPath costFn moveFn start end =
   initialModel start
     |> astar costFn moveFn end
