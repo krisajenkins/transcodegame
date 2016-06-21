@@ -1,107 +1,100 @@
-module View (root) where
+module View exposing (root)
 
 import Common.View exposing (..)
-import Narrative
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Signal exposing (..)
+import Narrative
 import Types exposing (..)
 import View.Svg
 
 
-root : Address Action -> Model -> Html
-root address model =
-  div
-    [ id "main-content"
-    , style
-        [ ( "width", (px (19 * View.Svg.tileSize)) )
-        , ( "height", (px (12 * View.Svg.tileSize)) )
-        , ( "margin", "0 auto" )
-        ]
-    ]
-    [ div
-        [ style
-            [ ( "perspective", px 1000 )
-            , ( "margin-top", px -50 )
-            , ( "text-align", "center" )
+root : Model -> Html Msg
+root model =
+    div
+        [ id "main-content"
+        , style
+            [ ( "width", (px (19 * View.Svg.tileSize)) )
+            , ( "height", (px (12 * View.Svg.tileSize)) )
+            , ( "margin", "0 auto" )
             ]
         ]
         [ div
             [ style
-                [ ( "transform", "rotate3d(1,0,0,35deg)" )
-                , ( "width", pct 100 )
-                , ( "height", pct 100 )
+                [ ( "perspective", px 1000 )
+                , ( "margin-top", px -50 )
+                , ( "text-align", "center" )
                 ]
             ]
-            [ View.Svg.root address model ]
+            [ div
+                [ style
+                    [ ( "transform", "rotate3d(1,0,0,35deg)" )
+                    , ( "width", pct 100 )
+                    , ( "height", pct 100 )
+                    ]
+                ]
+                [ View.Svg.root model ]
+            ]
+        , p [ class "dialogue" ]
+            [ text (Maybe.withDefault "" model.dialogue) ]
+        , div [ class "btn-group" ]
+            (List.map commandButton
+                [ ( PartialCommand PartialPickUp, "Pick up" )
+                , ( PartialCommand PartialExamine, "Examine" )
+                , ( PartialCommand PartialUse, "Use" )
+                ]
+            )
+        , inventoryView model.player.inventory
+        , partialCommandView model.partialCommand
         ]
-    , p
-        [ class "dialogue" ]
-        [ text (Maybe.withDefault "" model.dialogue) ]
-    , div
-        [ class "btn-group" ]
-        (List.map
-          (commandButton address)
-          [ ( PartialCommand PartialPickUp, "Pick up" )
-          , ( PartialCommand PartialExamine, "Examine" )
-          , ( PartialCommand PartialUse, "Use" )
-          ]
-        )
-    , inventoryView address model.player.inventory
-    , partialCommandView model.partialCommand
-    ]
 
 
-inventoryView : Address Action -> List Object -> Html
-inventoryView address inventory =
-  div
-    []
-    [ h4 [] [ text "Inventory" ]
-    , div
-        [ class "inventory" ]
-        (List.map (inventoryObjectView address) inventory)
-    ]
+inventoryView : List Object -> Html Msg
+inventoryView inventory =
+    div []
+        [ h4 [] [ text "Inventory" ]
+        , div [ class "inventory" ]
+            (List.map inventoryObjectView inventory)
+        ]
 
 
-inventoryObjectView : Address Action -> Object -> Html
-inventoryObjectView address object =
-  button
-    [ class "btn btn.info inventory-button"
-    , onClick address (PlayerCommand (Interact (Thing object)))
-    , style [ ( "background-image", "url(images/" ++ toString object ++ ".png" ) ]
-    ]
-    [ text (toString object) ]
+inventoryObjectView : Object -> Html Msg
+inventoryObjectView object =
+    button
+        [ class "btn btn.info inventory-button"
+        , onClick (PlayerCommand (Interact (Thing object)))
+        , style [ ( "background-image", "url(images/" ++ toString object ++ ".png" ) ]
+        ]
+        [ text (toString object) ]
 
 
-partialCommandView : Maybe PartialCommand -> Html
+partialCommandView : Maybe PartialCommand -> Html msg
 partialCommandView partialCommand =
-  div
-    []
-    [ text
-        (case partialCommand of
-          Nothing ->
-            ""
+    div []
+        [ text
+            (case partialCommand of
+                Nothing ->
+                    ""
 
-          Just PartialPickUp ->
-            "Pick up..."
+                Just PartialPickUp ->
+                    "Pick up..."
 
-          Just PartialExamine ->
-            "Examine..."
+                Just PartialExamine ->
+                    "Examine..."
 
-          Just PartialUse ->
-            "Use..."
+                Just PartialUse ->
+                    "Use..."
 
-          Just (PartialUseOne thing) ->
-            "Use " ++ Narrative.nameOf thing ++ " with..."
-        )
-    ]
+                Just (PartialUseOne thing) ->
+                    "Use " ++ Narrative.nameOf thing ++ " with..."
+            )
+        ]
 
 
-commandButton : Address Action -> ( Command, String ) -> Html
-commandButton address ( command, title ) =
-  button
-    [ class "btn btn-lg btn-info"
-    , onClick address (PlayerCommand command)
-    ]
-    [ text title ]
+commandButton : ( Command, String ) -> Html Msg
+commandButton ( command, title ) =
+    button
+        [ class "btn btn-lg btn-info"
+        , onClick (PlayerCommand command)
+        ]
+        [ text title ]

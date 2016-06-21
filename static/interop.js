@@ -2,5 +2,5 @@
 
 (function () {
     // Start the Elm App.
-    var app = Elm.fullscreen(Elm.App, {});
+    var app = Elm.App.fullscreen();
 }());

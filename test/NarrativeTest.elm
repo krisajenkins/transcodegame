@@ -1,40 +1,39 @@
-module NarrativeTest (tests) where
+module NarrativeTest exposing (tests)
 
 import ElmTest exposing (..)
 import Narrative exposing (..)
-import Types exposing (..)
 import State
+import Types exposing (..)
 
 
 tests : Test
 tests =
-  ElmTest.suite
-    "Narrative"
-    [ handleCommandTests
-    ]
+    ElmTest.suite "Narrative"
+        [ handleCommandTests
+        ]
 
 
 handleCommandTests : Test
 handleCommandTests =
-  ElmTest.suite
-    "handleCommand"
-    [ defaultTest
-        (assertEqual
-          [ Molotov ]
-          (handleCommands
-            [ (PickUp ( 11, 9 ) Cinzano)
-            , (PickUp ( 6, 9 ) Rag)
-            , (Use Rag Cinzano)
-            ]
-            |> .player
-            |> .inventory
-          )
-        )
-    ]
+    ElmTest.suite "handleCommand"
+        [ defaultTest
+            (assertEqual []
+                (handleCommands
+                    [ (PickUp ( 11, 9 ) Cinzano)
+                    , (PickUp ( 6, 9 ) Rag)
+                    , (PickUp ( 14, 2 ) Lighter)
+                    , (Use Rag Cinzano)
+                    , (Use Lighter Molotov)
+                    , (Use MolotovLit Shed)
+                    ]
+                    |> .player
+                    |> .inventory
+                )
+            )
+        ]
 
 
 handleCommands : List Command -> Model
 handleCommands =
-  List.foldl
-    (\command -> handleCommand command >> fst)
-    State.initialModel
+    List.foldl (\command -> handleCommand command >> fst)
+        (fst State.initialState)

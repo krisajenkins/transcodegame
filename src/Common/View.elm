@@ -1,11 +1,11 @@
-module Common.View (px, pct) where
+module Common.View exposing (px, pct)
 
 
 px : Int -> String
 px n =
-  toString n ++ "px"
+    toString n ++ "px"
 
 
 pct : Int -> String
 pct n =
-  toString n ++ "%"
+    toString n ++ "%"

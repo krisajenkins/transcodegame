@@ -1,4 +1,4 @@
-module Types (..) where
+module Types exposing (..)
 
 import Dict exposing (Dict)
 import Set exposing (Set)
@@ -6,248 +6,249 @@ import Time exposing (Time)
 
 
 type alias Position =
-  ( Int, Int )
+    ( Int, Int )
 
 
 type alias World a =
-  Dict Position a
+    Dict Position a
 
 
 type Object
-  = BlackBiro
-  | Chicken
-  | Cinzano
-  | Fridge
-  | FridgeEmpty
-  | Lighter
-  | Molotov
-  | MolotovLit
-  | Package
-  | Paperwork
-  | PaperworkDone
-  | Parcel
-  | Postbox
-  | PotatoSackEmpty
-  | PotatoSackFull
-  | Rag
-  | Shed
-  | Stamps
-  | Still
-  | UselessVaseEmpty
-  | UselessVaseFull
-  | WheelbarrowBroken
-  | WheelbarrowFixed
-  | WheelbarrowFull
-  | ThePlayer
+    = BlackBiro
+    | Chicken
+    | Cinzano
+    | Fridge
+    | FridgeEmpty
+    | Lighter
+    | Molotov
+    | MolotovLit
+    | Package
+    | Paperwork
+    | PaperworkDone
+    | Parcel
+    | Postbox
+    | PotatoSackEmpty
+    | PotatoSackFull
+    | Rag
+    | Shed
+    | Stamps
+    | Still
+    | UselessVaseEmpty
+    | UselessVaseFull
+    | WheelbarrowBroken
+    | WheelbarrowFixed
+    | WheelbarrowFull
+    | ThePlayer
 
 
 type Cell
-  = Block
-  | Path
-  | Thing Object
+    = Block
+    | Path
+    | Thing Object
 
 
 type PartialCommand
-  = PartialPickUp
-  | PartialExamine
-  | PartialUse
-  | PartialUseOne Object
+    = PartialPickUp
+    | PartialExamine
+    | PartialUse
+    | PartialUseOne Object
 
 
 type Command
-  = WalkTo Position
-  | PickUp Position Object
-  | Examine Object
-  | Use Object Object
-  | Interact Cell
-  | InteractAt Position Cell
-  | PartialCommand PartialCommand
+    = WalkTo Position
+    | PickUp Position Object
+    | Examine Object
+    | Use Object Object
+    | Interact Cell
+    | InteractAt Position Cell
+    | PartialCommand PartialCommand
 
 
-type Action
-  = Tick Time
-  | PlayerCommand Command
+type Msg
+    = Tick Time
+    | PlayerCommand Command
 
 
 type alias Player =
-  { position : Position, inventory : List Object }
+    { position : Position, inventory : List Object }
 
 
 type alias Model =
-  { world : World Cell
-  , player : Player
-  , dialogue : Maybe String
-  , partialCommand : Maybe PartialCommand
-  , destination : Maybe Position
-  , queuedCommand : Maybe Command
-  , timeSinceLastMove : Maybe Time
-  }
+    { world : World Cell
+    , player : Player
+    , dialogue : Maybe String
+    , partialCommand : Maybe PartialCommand
+    , destination : Maybe Position
+    , queuedCommand : Maybe Command
+    , timeSinceLastMove : Maybe Time
+    }
 
 
 canStandOn : Maybe Cell -> Bool
 canStandOn cell =
-  case cell of
-    Nothing ->
-      False
+    case cell of
+        Nothing ->
+            False
 
-    Just Path ->
-      True
+        Just Path ->
+            True
 
-    Just (Thing _) ->
-      False
+        Just (Thing _) ->
+            False
 
-    Just Block ->
-      False
+        Just Block ->
+            False
 
 
 objectAt : World Cell -> Position -> Maybe Cell
 objectAt =
-  flip Dict.get
+    flip Dict.get
 
 
 estimatedDistance : Position -> Position -> Float
 estimatedDistance ( x1, y1 ) ( x2, y2 ) =
-  let
-    dx = toFloat <| abs (x1 - x2)
-    dy = toFloat <| abs (y1 - y2)
-  in
-    abs <| (sqrt 2 * min dx dy) + abs (dy - dx)
+    let
+        dx =
+            toFloat <| abs (x1 - x2)
+
+        dy =
+            toFloat <| abs (y1 - y2)
+    in
+        abs <| (sqrt 2 * min dx dy) + abs (dy - dx)
 
 
 movesFrom : Position -> Set Position
 movesFrom ( x, y ) =
-  Set.fromList
-    [ ( x - 1, y )
-    , ( x + 1, y )
-    , ( x, y - 1 )
-    , ( x, y + 1 )
-    , ( x - 1, y + 1 )
-    , ( x - 1, y - 1 )
-    , ( x + 1, y - 1 )
-    , ( x + 1, y + 1 )
-    ]
+    Set.fromList
+        [ ( x - 1, y )
+        , ( x + 1, y )
+        , ( x, y - 1 )
+        , ( x, y + 1 )
+        , ( x - 1, y + 1 )
+        , ( x - 1, y - 1 )
+        , ( x + 1, y - 1 )
+        , ( x + 1, y + 1 )
+        ]
 
 
 validMovesFrom : World Cell -> Position -> Set Position
 validMovesFrom world position =
-  Set.filter
-    (canStandOn << objectAt world)
-    (movesFrom position)
+    Set.filter (canStandOn << objectAt world)
+        (movesFrom position)
 
 
 canPickUp : Object -> Bool
 canPickUp object =
-  case object of
-    BlackBiro ->
-      True
+    case object of
+        BlackBiro ->
+            True
 
-    Chicken ->
-      True
+        Chicken ->
+            True
 
-    Cinzano ->
-      True
+        Cinzano ->
+            True
 
-    Fridge ->
-      False
+        Fridge ->
+            False
 
-    FridgeEmpty ->
-      False
+        FridgeEmpty ->
+            False
 
-    Lighter ->
-      True
+        Lighter ->
+            True
 
-    Molotov ->
-      True
+        Molotov ->
+            True
 
-    MolotovLit ->
-      False
+        MolotovLit ->
+            False
 
-    Package ->
-      False
+        Package ->
+            False
 
-    Paperwork ->
-      False
+        Paperwork ->
+            False
 
-    PaperworkDone ->
-      False
+        PaperworkDone ->
+            False
 
-    Parcel ->
-      False
+        Parcel ->
+            False
 
-    Postbox ->
-      False
+        Postbox ->
+            False
 
-    PotatoSackEmpty ->
-      True
+        PotatoSackEmpty ->
+            True
 
-    PotatoSackFull ->
-      True
+        PotatoSackFull ->
+            True
 
-    Rag ->
-      True
+        Rag ->
+            True
 
-    Shed ->
-      False
+        Shed ->
+            False
 
-    Stamps ->
-      True
+        Stamps ->
+            True
 
-    Still ->
-      False
+        Still ->
+            False
 
-    UselessVaseEmpty ->
-      True
+        UselessVaseEmpty ->
+            True
 
-    UselessVaseFull ->
-      True
+        UselessVaseFull ->
+            True
 
-    WheelbarrowBroken ->
-      False
+        WheelbarrowBroken ->
+            False
 
-    WheelbarrowFixed ->
-      True
+        WheelbarrowFixed ->
+            True
 
-    WheelbarrowFull ->
-      True
+        WheelbarrowFull ->
+            True
 
-    ThePlayer ->
-      False
+        ThePlayer ->
+            False
 
 
 addItems : List Object -> Model -> Model
 addItems items model =
-  let
-    player =
-      model.player
-  in
-    { model
-      | player =
-          { player
-            | inventory =
-                items ++ model.player.inventory
-          }
-    }
+    let
+        player =
+            model.player
+    in
+        { model
+            | player =
+                { player
+                    | inventory =
+                        items ++ model.player.inventory
+                }
+        }
 
 
 removeItems : List Object -> Model -> Model
 removeItems items model =
-  let
-    player =
-      model.player
-  in
-    { model
-      | player =
-          { player
-            | inventory =
-                List.filter
-                  (not << flip List.member items)
-                  model.player.inventory
-          }
-    }
+    let
+        player =
+            model.player
+    in
+        { model
+            | player =
+                { player
+                    | inventory =
+                        List.filter (not << flip List.member items)
+                            model.player.inventory
+                }
+        }
 
 
 combineItems : Object -> Object -> Object -> Model -> Model
 combineItems obj1 obj2 result model =
-  model
-    |> removeItems [ obj1, obj2 ]
-    |> addItems [ result ]
+    model
+        |> removeItems [ obj1, obj2 ]
+        |> addItems [ result ]
